@@ -1,0 +1,32 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/animesh/Code/Notes/AlgorithmsNotebook/code/BinaryMinHeap.cpp
+BinaryMinHeap.h
+/home/animesh/Code/Notes/AlgorithmsNotebook/code/BinaryMinHeap.h
+
+/home/animesh/Code/Notes/AlgorithmsNotebook/code/BinaryMinHeap.h
+iostream
+-
+vector
+-
+cstdint
+-
+BinaryTreeArray.h
+/home/animesh/Code/Notes/AlgorithmsNotebook/code/BinaryTreeArray.h
+
+/home/animesh/Code/Notes/AlgorithmsNotebook/code/BinaryTreeArray.cpp
+BinaryTreeArray.h
+/home/animesh/Code/Notes/AlgorithmsNotebook/code/BinaryTreeArray.h
+
+/home/animesh/Code/Notes/AlgorithmsNotebook/code/BinaryTreeArray.h
+iostream
+-
+vector
+-
+
