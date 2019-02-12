@@ -96,6 +96,12 @@
 		<Unit filename="/home/animesh/Code/Notes/AlgorithmsNotebook/code/BinaryTreeArray.h">
 			<Option target="code"/>
 		</Unit>
+		<Unit filename="/home/animesh/Code/Notes/AlgorithmsNotebook/code/BinomialTree.cpp">
+			<Option target="code"/>
+		</Unit>
+		<Unit filename="/home/animesh/Code/Notes/AlgorithmsNotebook/code/BinomialTree.h">
+			<Option target="code"/>
+		</Unit>
 		<Unit filename="/home/animesh/Code/Notes/AlgorithmsNotebook/code/main.cpp">
 			<Option target="code"/>
 		</Unit>

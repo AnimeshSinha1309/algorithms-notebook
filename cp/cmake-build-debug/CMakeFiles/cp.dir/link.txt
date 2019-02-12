@@ -1,0 +1,1 @@
+/usr/bin/c++  -g   CMakeFiles/cp.dir/stacks/0005C.cpp.o  -o cp 

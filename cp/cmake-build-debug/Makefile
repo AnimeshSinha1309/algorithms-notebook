@@ -48,10 +48,10 @@ RM = /home/animesh/Software/clion-2018.3.1/bin/cmake/linux/bin/cmake -E remove -
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/animesh/Code/Notes/AlgorithmsNotebook/code
+CMAKE_SOURCE_DIR = /home/animesh/Code/Notes/AlgorithmsNotebook/cp
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/animesh/Code/Notes/AlgorithmsNotebook/code/cmake-build-debug
+CMAKE_BINARY_DIR = /home/animesh/Code/Notes/AlgorithmsNotebook/cp/cmake-build-debug
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -80,9 +80,9 @@ edit_cache/fast: edit_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/animesh/Code/Notes/AlgorithmsNotebook/code/cmake-build-debug/CMakeFiles /home/animesh/Code/Notes/AlgorithmsNotebook/code/cmake-build-debug/CMakeFiles/progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/animesh/Code/Notes/AlgorithmsNotebook/cp/cmake-build-debug/CMakeFiles /home/animesh/Code/Notes/AlgorithmsNotebook/cp/cmake-build-debug/CMakeFiles/progress.marks
 	$(MAKE) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/animesh/Code/Notes/AlgorithmsNotebook/code/cmake-build-debug/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/animesh/Code/Notes/AlgorithmsNotebook/cp/cmake-build-debug/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
@@ -111,125 +111,44 @@ depend:
 .PHONY : depend
 
 #=============================================================================
-# Target rules for targets named code
+# Target rules for targets named cp
 
 # Build rule for target.
-code: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 code
-.PHONY : code
+cp: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 cp
+.PHONY : cp
 
 # fast build rule for target.
-code/fast:
-	$(MAKE) -f CMakeFiles/code.dir/build.make CMakeFiles/code.dir/build
-.PHONY : code/fast
+cp/fast:
+	$(MAKE) -f CMakeFiles/cp.dir/build.make CMakeFiles/cp.dir/build
+.PHONY : cp/fast
 
-BinaryMinHeap.o: BinaryMinHeap.cpp.o
+stacks/0005C.o: stacks/0005C.cpp.o
 
-.PHONY : BinaryMinHeap.o
-
-# target to build an object file
-BinaryMinHeap.cpp.o:
-	$(MAKE) -f CMakeFiles/code.dir/build.make CMakeFiles/code.dir/BinaryMinHeap.cpp.o
-.PHONY : BinaryMinHeap.cpp.o
-
-BinaryMinHeap.i: BinaryMinHeap.cpp.i
-
-.PHONY : BinaryMinHeap.i
-
-# target to preprocess a source file
-BinaryMinHeap.cpp.i:
-	$(MAKE) -f CMakeFiles/code.dir/build.make CMakeFiles/code.dir/BinaryMinHeap.cpp.i
-.PHONY : BinaryMinHeap.cpp.i
-
-BinaryMinHeap.s: BinaryMinHeap.cpp.s
-
-.PHONY : BinaryMinHeap.s
-
-# target to generate assembly for a file
-BinaryMinHeap.cpp.s:
-	$(MAKE) -f CMakeFiles/code.dir/build.make CMakeFiles/code.dir/BinaryMinHeap.cpp.s
-.PHONY : BinaryMinHeap.cpp.s
-
-BinaryTreeArray.o: BinaryTreeArray.cpp.o
-
-.PHONY : BinaryTreeArray.o
+.PHONY : stacks/0005C.o
 
 # target to build an object file
-BinaryTreeArray.cpp.o:
-	$(MAKE) -f CMakeFiles/code.dir/build.make CMakeFiles/code.dir/BinaryTreeArray.cpp.o
-.PHONY : BinaryTreeArray.cpp.o
+stacks/0005C.cpp.o:
+	$(MAKE) -f CMakeFiles/cp.dir/build.make CMakeFiles/cp.dir/stacks/0005C.cpp.o
+.PHONY : stacks/0005C.cpp.o
 
-BinaryTreeArray.i: BinaryTreeArray.cpp.i
+stacks/0005C.i: stacks/0005C.cpp.i
 
-.PHONY : BinaryTreeArray.i
-
-# target to preprocess a source file
-BinaryTreeArray.cpp.i:
-	$(MAKE) -f CMakeFiles/code.dir/build.make CMakeFiles/code.dir/BinaryTreeArray.cpp.i
-.PHONY : BinaryTreeArray.cpp.i
-
-BinaryTreeArray.s: BinaryTreeArray.cpp.s
-
-.PHONY : BinaryTreeArray.s
-
-# target to generate assembly for a file
-BinaryTreeArray.cpp.s:
-	$(MAKE) -f CMakeFiles/code.dir/build.make CMakeFiles/code.dir/BinaryTreeArray.cpp.s
-.PHONY : BinaryTreeArray.cpp.s
-
-BinomialTree.o: BinomialTree.cpp.o
-
-.PHONY : BinomialTree.o
-
-# target to build an object file
-BinomialTree.cpp.o:
-	$(MAKE) -f CMakeFiles/code.dir/build.make CMakeFiles/code.dir/BinomialTree.cpp.o
-.PHONY : BinomialTree.cpp.o
-
-BinomialTree.i: BinomialTree.cpp.i
-
-.PHONY : BinomialTree.i
+.PHONY : stacks/0005C.i
 
 # target to preprocess a source file
-BinomialTree.cpp.i:
-	$(MAKE) -f CMakeFiles/code.dir/build.make CMakeFiles/code.dir/BinomialTree.cpp.i
-.PHONY : BinomialTree.cpp.i
+stacks/0005C.cpp.i:
+	$(MAKE) -f CMakeFiles/cp.dir/build.make CMakeFiles/cp.dir/stacks/0005C.cpp.i
+.PHONY : stacks/0005C.cpp.i
 
-BinomialTree.s: BinomialTree.cpp.s
+stacks/0005C.s: stacks/0005C.cpp.s
 
-.PHONY : BinomialTree.s
-
-# target to generate assembly for a file
-BinomialTree.cpp.s:
-	$(MAKE) -f CMakeFiles/code.dir/build.make CMakeFiles/code.dir/BinomialTree.cpp.s
-.PHONY : BinomialTree.cpp.s
-
-main.o: main.cpp.o
-
-.PHONY : main.o
-
-# target to build an object file
-main.cpp.o:
-	$(MAKE) -f CMakeFiles/code.dir/build.make CMakeFiles/code.dir/main.cpp.o
-.PHONY : main.cpp.o
-
-main.i: main.cpp.i
-
-.PHONY : main.i
-
-# target to preprocess a source file
-main.cpp.i:
-	$(MAKE) -f CMakeFiles/code.dir/build.make CMakeFiles/code.dir/main.cpp.i
-.PHONY : main.cpp.i
-
-main.s: main.cpp.s
-
-.PHONY : main.s
+.PHONY : stacks/0005C.s
 
 # target to generate assembly for a file
-main.cpp.s:
-	$(MAKE) -f CMakeFiles/code.dir/build.make CMakeFiles/code.dir/main.cpp.s
-.PHONY : main.cpp.s
+stacks/0005C.cpp.s:
+	$(MAKE) -f CMakeFiles/cp.dir/build.make CMakeFiles/cp.dir/stacks/0005C.cpp.s
+.PHONY : stacks/0005C.cpp.s
 
 # Help Target
 help:
@@ -238,20 +157,11 @@ help:
 	@echo "... clean"
 	@echo "... depend"
 	@echo "... rebuild_cache"
-	@echo "... code"
+	@echo "... cp"
 	@echo "... edit_cache"
-	@echo "... BinaryMinHeap.o"
-	@echo "... BinaryMinHeap.i"
-	@echo "... BinaryMinHeap.s"
-	@echo "... BinaryTreeArray.o"
-	@echo "... BinaryTreeArray.i"
-	@echo "... BinaryTreeArray.s"
-	@echo "... BinomialTree.o"
-	@echo "... BinomialTree.i"
-	@echo "... BinomialTree.s"
-	@echo "... main.o"
-	@echo "... main.i"
-	@echo "... main.s"
+	@echo "... stacks/0005C.o"
+	@echo "... stacks/0005C.i"
+	@echo "... stacks/0005C.s"
 .PHONY : help
 
 

@@ -3,4 +3,4 @@ project(code)
 
 set(CMAKE_CXX_STANDARD 17)
 
-add_executable(code main.cpp BinaryTreeArray.cpp BinaryTreeArray.h BinaryMinHeap.cpp BinaryMinHeap.h)
+add_executable(code main.cpp BinaryTreeArray.cpp BinaryTreeArray.h BinaryMinHeap.cpp BinaryMinHeap.h BinomialTree.cpp BinomialTree.h)
