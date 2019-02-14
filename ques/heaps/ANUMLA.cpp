@@ -2,7 +2,7 @@
  * @Problem
  * Sum of all subsets of a set is given, find the original set.
  * @Reference
- * https://en.cppreference.com/w/cpp/container/priority_queue
+ * https://www.codechef.com/problems/ANUMLA
  * cook51, easy, greedy, heap, multiset
  */
 

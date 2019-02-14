@@ -2,7 +2,26 @@
 
 
 
-\section{Basic Operations}
+\section{Question Patterns}
+
+
+\subsection{Generic Types}
+
+\begin{itemize}
+    \item Find the kth Minimum or Maximum. This can also be on arrays or trees with online insertion or deletion.
+    \item Priority Queue questions. Typically greedy algorithms best implemented this way. (eg. Dijkstra)
+\end{itemize}
+
+
+\subsection{Specific Illustrations}
+
+\paragraph{When not to use Heaps} \textit{Question: Find the kth-Maximum sum of all subarrays of any given array}. This question demostrates that when we have \textbf{k-sorted elements appended to our queue of k-maximum elements} at one go, it's better to use an actual \textbf{Sorted array and the Merge Function for Updates}.
+
+\paragraph{Lazy Deletion} Heaps cannot search, so heaps cannot delete. A simple solution for this is to maintain another heap of all deleted elements, and if the actual heap and deleted heap have the same top element, keep popping them out. We only care about the top element, so we can be Lazy in the deletion of the elements lower down in the tree.
+
+
+
+\section{Elementary Theory}
 
 
 \subsection{Basic Operations}
@@ -14,17 +33,12 @@ A \textbf{O(n)} algorithm exists for Heapification. It uses the standard sift-do
 A \textbf{O(log n)} algorithm is used to insert. We push the element at the end of the array and sift-up or sift-down the element till the element is at a valid locale. 
 
 \paragraph{Delete}
-For a \textbf{O(log n)} deletion algorithm, we must swap the last element with the element to be deleted, sift-up/down the former last element, and pop-out the last element. 
+For a \textbf{O(log n)} deletion algorithm, we must swap the last element with the element to be deleted, sift-up/down the former last element, and pop-out the last element.
+This is only possible if we have a refernce to the element, search and delete take O(n) time to perform on heaps.
 
+\paragraph{Minimum/Maximum}
+Minimum on a MinHeap takes \textbf{O(1)} time, and so does Maximum on a MaxHeap.
 
-\subsection{Sample Code}
+\subsection{Implementation Code}
 
 \lstinputlisting[basicstyle=Large,style=cpp]{code/BinaryMinHeap.cpp}
-
-
-
-\section{Binomial Heaps}
-
-
-
-\section{Fibonacci Heaps}

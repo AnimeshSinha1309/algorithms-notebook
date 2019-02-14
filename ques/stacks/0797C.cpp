@@ -1,3 +1,12 @@
+/**
+ * @Problem
+ * Given a string, load each character onto a stack and pop to a resultant string
+ * to get the lexicographically minimal string.
+ * @Reference
+ * https://codeforces.com/contest/797/problem/C
+ * data structures, greedy, strings, *1700
+ */
+
 #include <iostream>
 #include <stack>
 using namespace std;

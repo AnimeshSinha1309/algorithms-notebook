@@ -1,3 +1,12 @@
+/**
+ * @Problem
+ * For any subarray (l,r) let x be the XOR of maximum two numbers.
+ * Find the maximum of all such x's for any subarray in the given array.
+ * @Reference
+ * https://codeforces.com/contest/281/problem/D
+ * two pointers, *2000
+ */
+
 #include <iostream>
 #include <stack>
 #include <vector>

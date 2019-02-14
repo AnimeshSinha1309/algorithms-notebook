@@ -1,3 +1,12 @@
+/**
+ * @Problem
+ * With online insertion and deletion of points in a set S, find the point in S
+ * farthest from a random queried point (x,y).
+ * @Reference
+ * https://www.codechef.com/problems/MOSTDIST
+ * cook52, easy, geometry, heap, kostya_by, manhattan
+ */
+
 #include <iostream>
 #include <vector>
 #include <queue>
