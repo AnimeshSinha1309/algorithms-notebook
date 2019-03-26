@@ -1,0 +1,15 @@
+# VScode editor directory
+.vscode/
+
+# Keeping away the CLion Files
+code/.idea/
+ques/.idea/
+code/cmake-build-debug/
+ques/cmake-build-debug/
+
+# The LaTeX output files
+notebook.aux
+notebook.fls
+notebook.log
+notebook.synctex.gz
+notebook.fdb_latexmk

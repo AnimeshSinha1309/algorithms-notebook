@@ -1,11 +1,12 @@
 #include <iostream>
-#include <vector>
-#include "BinaryMinHeap.h"
+#include "BinaryHeap.h"
+#include "SegmentTree.h"
+
 using namespace std;
 
 int main() {
-    vector<int> data({5, 7, 2, 9, 12, 0, 12, 34, 1, 23, 45, 9, 16});
-    BinaryMinHeap heap(data); heap.insert(4); heap.print();
-    vector<int> sorted = heap.sort();
-    for (auto item : sorted) cout << item << " "; cout << endl;
+    BinaryHeap<int> heap({7, 5, 3, 9, 1, 6}, greater<>());
+    cout << "Binary Heap Sort: "; for (auto el : heap.sort()) cout << el << " "; cout << endl;
+    SegmentTree<int> segtree({2, 3, 8, 5, 6, 9}, [](int x, int y) { return x + y; }, 0);
+    cout << "Segment Tree Sum: " << segtree.query(2, 4) << endl;
 }

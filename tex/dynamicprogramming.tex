@@ -1,0 +1,14 @@
+\chapter{Dynamic Programming}
+
+
+
+\section{Matrix Exponentiation}
+
+
+\begin{example}{}
+\textbf{Number of ways to construct an array starting in X, and ending in Y, with no two adjacent elements are the same.}
+\begin{equation*}
+    dp[i] = \begin{bmatrix} dp[i][\text{CLASH}] \\ dp[i][\text{CLEAN}] \end{bmatrix}
+    = \begin{bmatrix} 0 & 1 \\ k-1 & k-2 \end{bmatrix} \times dp[i-1]
+\end{equation*}
+\end{example}

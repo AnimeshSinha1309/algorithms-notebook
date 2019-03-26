@@ -1,0 +1,27 @@
+\chapter{Handling Range Queries}
+
+
+
+\section{Square Root Decomposition}
+
+
+\subsection{Motivating Examples}
+
+\begin{example}{}
+    \textbf{Question: Given and array, support update and query operation for number of elements less than k in the given range.} \\
+    Solution: Maintain sorted vector of each block of the square-root decomposition. Search over all blocks and find lowerbound(k), the sum of these counts gives the answer in $O(\sqrt{n} log(n))$. For update, just sort again, using insertion sort you get $O(\sqrt{n})$.
+\end{example}
+
+
+
+\section{Mo's Algorithm}
+
+\begin{example}{}
+    \textbf{Question: Given an array, find the number of elements distinct elements in range (l, r).} \\
+    Sort the queries first by the starting block, then by the end position. Maintian a frequency array of all elements currently between right and left pointers. For each of the $O(\sqrt{n})$ blocks, the start pointer moves atmost $O(\sqrt{n})$ times back and forth in the block, adding and deleting elements. For each block the right pointer only goes forward adding in elements, $O(\sqrt{n})$ blocks each taking $O(n)$ time.
+\end{example}
+
+\begin{example}{}
+    \textbf{Question: Given an array, find the f(s)*f(s)*s for all distinct s in range (l, r), where f(s) is the frequency of s.} \\
+    Same Algorithm, and same frequency array as above, just find $f(s)*f(s)*s$ instead of $\delta(f(s))$ as above.
+\end{example}
