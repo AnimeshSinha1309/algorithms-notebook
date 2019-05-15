@@ -1,0 +1,70 @@
+\chapter{Game Theory}
+
+
+
+\section{NIM Games and Sprague-Grundy Theorem}
+
+
+
+\section{Take Away Games}
+
+
+\subsection{Identifying the Losing States}
+
+\begin{theorem}{Take Away}
+  Let $H_i$ denote all the losing states, and $f(x)$ denote the number of stones that can be removed in the next move after x stones in the previous. Then we can find the losing states as follows.
+  \begin{equation}
+    H_{k+1} = H_k + H_m, \;\;\;\;\; where \;\; m = min \{j: f(H_j) \geq H_k\}    
+  \end{equation}
+\end{theorem}
+The idea is that we can remove any $H_j + H_k$ stones, we can think of them as two separate piles. We cannot win on either pile, so the only way to win is when the $H_j$ pile ends, the last move was enough that $f(last\:move) \geq H_k$ so that we can win next move. If this is not possible, then the state is losing.
+
+\textbf{KEY IDEA: Find the RECURRENCE, make a SOLUTION HYPOTHESIS by monitoring the pattern and prove it BY INDUCTION to get all the losing states.}
+
+
+\subsection{A few Example Functions}
+
+\subsubsection{Example: f(x) = x}
+1 stone is losing, so $H_1 = 1$. And whenever $H_k$ is losing, the $min\{H_j : f(H_j) \geq H_k\} = min\{H_j : H_j \geq H_k\} = H_k$, therefore the losing states are $2^n$.
+\subsubsection{Example: f(x) = 2x - 1}
+1 stone is losing, so $H_1 = 1$. Our Hypothesis, $H_k = 2 H_{k-1}$. And whenever $H_k$ is losing, the $min\{H_j : f(H_j) \geq H_k\} = min\{H_j : 2*H_j-1 \geq H_k\} = H_k$, therefore the losing states are $2^n$.
+\subsubsection{Example: f(x) = 2x: Fibonacci NIM}
+1 stone is losing, so $H_1 = 1$. Our Hypothesis, $H_k = H_{k-1} + H_{k-2}$. And whenever $H_k$ is losing, the $min\{H_j : f(H_j) \geq H_k\} = min\{H_j : 2*H_j \geq H_k\} = H_{k-1}$, therefore the losing states are the Fibonacci numbers.
+
+
+\subsection{Winning Strategy}
+
+\subsubsection{New Binary number systems}
+We find that we can express any number as a sum of the values of $H_1$, $H_2$, ..., so we construct a binary like number system where a the place value of the i-th digit is $H_i$ and the face value is 0 or 1. Let's call this H-binary. (Note: This expression is unique and complete for powers of 2, and for the Fibonacci numbers - Zeckendorf theorem, as in the above examples).
+
+\subsubsection{The greedy strategy}
+
+Given any starting state that is not losing, we can write out it's representation in the H-Binary system.
+Since this will have more than 1 ones in it's representation, \colorbox{yellow}{we subtract the LEAST SIGNIFICANT BIT}. 
+
+Now, the opponent cannot remove the next one in the representation, because of the property of number systems that $H_j > f(H_i) \;\; \forall j > i$, due to the way we found losing states $H_i$. Finally, when our oppnent removes any value from the form $.....1000000$ (Any value, last set bit 1, and 0s), he will get a 1 in the resulting representation $.....0000110$. 
+
+Now in our move we shall remove the lowest set bit again. This is possible, as the last move must have been greater than or equal to $H_j$ if j is lowest set bit. (Obviously, because when we add back we need to have 1+1 = 0 to get all the numbers back to 0 and 1 at the position that could not be removed). So $f(H_j) >= H_j$, this move is possible, and we can win.
+
+\subsection{Proof of Victory}
+On our moves, we reduce the number of ones in the representation by 1. Our opponent, if he removes the one at $H_j$, he has to insert a 1 and position smaller than j. So he increases or keeps constant the number of ones. Obviously, the last move will be played by us, reducing the number of ones to 0 and finishing the game. 
+
+
+\subsection{References}
+
+\subsubsection{Problems}
+Fibonacci Nim (Direct Implementation) [ICPC Kolkata 2018] \url{https://www.codechef.com/KOL18ROL/problems/SNOWMAN}
+
+\subsubsection{Theory}
+Contains most of the theory mentioned above: \url{http://www.cut-the-knot.org/Curriculum/Games/TakeAway.shtml#theory}
+
+
+
+\section{Finding Invarients}
+
+\textbf{Mark out a state and all it's children. Either try MINIMAX TREE, and if the state space is large, try to find invarients, specially MODULO or PARITY.}
+
+\begin{example}{}
+  \textbf{Question: Start with \{(4 sticks, length 4), (1 stick, length 1)\}. In a move, we can break a stick or remove k sticks of length k. Last move wins. Find the winning states \& strategy.}
+  Any state be (n1, n2, n3, n4). All states with (n1 + n3) \% 2 == (n2 + n4) \% 3 are winning positions, all others are losing. We can prove than any winning position goes to losing position and vice-versa.
+\end{example}

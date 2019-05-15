@@ -1,0 +1,81 @@
+\chapter{Mathematical Tools}
+
+
+
+\section{Fast Fourier Transforms}
+
+
+\subsection{Motivation and Purpose}
+
+We want to be able to interconvert a polynomial between \textbf{SAMPLES representation and COEFFICIENTS representation}.
+
+\paragraph{} A n-degree polynomial can be a n-dimentional COEFFICIENTS vector where it is easy to compute the value at any random x, and as a n-dimentional SAMPLES vector that has n (x, y) pairs, making it easy to multiply vectors. If we can convert back and forth in $O(n \cdot log(n))$, and \textit{multiply polynomials} in SAMPLES land in $O(n)$, then we get a speed up over the typical $O(n^2)$ for multipling each coefficient with every other.
+
+
+\subsection{Algorithm}
+
+\subsubsection{The Recurrence}
+
+Given a polynomial $P(x)$, to convert it into samples at $X = \{X_1, X_2 ..., X_n\}$.
+We can solve it using the recurrence 
+\begin{equation}
+  P(X) = P_{even}(x^2) + x \cdot P_{odd}(x^2)
+\end{equation}
+where $P_{even}$ is the polynomials with only even coefficients, $P_{odd}$ with only odd.
+Note that the degree of the resulting polynomials $P_{even}$ and $P_{odd}$ is half of the original.
+
+\subsubsection{The Complex Numbers}
+
+We also want the size of the set X, at which we have to evaluate the polynomial to go down. So we can use complex numbers, for polynomial of degree n, we use \textbf{the $2^k$-roots of unity} where $2^k$ is the smallest value power of 2 bigger than n.
+
+The set will keep collapsing to half it's size after each step, as squares of exactly two of these roots is the same.
+
+\subsubsection{The Divide and Conquer}
+In summary, we are performing a Divide and Conquer solve, where each state is <P, X>.
+We start with our \textbf{Original P, and X = 1}. In each divide step, we split the P into two parts, and each part gets one root of X, here +1 and -1. Then that divides in 4, at values +i, -i, +1 and -1. There are log(n) layers with $2^l$ polynomials of size $n/2^l$, each polynomial is to be evaluated at 1 value.
+
+
+\subsection{Some Mathematical Representations}
+
+\begin{equation}
+  \begin{bmatrix}
+    1 & x_1^2 & x_1^3 & x_1^4 & ... & x_1^n \\
+    1 & x_2^2 & x_2^3 & x_2^4 & ... & x_2^n \\
+    1 & x_3^2 & x_3^3 & x_3^4 & ... & x_3^n \\
+    ... & ... &  ...  &  ...  & ... &  ...  \\
+    1 & x_n^2 & x_n^3 & x_n^4 & ... & x_n^n \\
+  \end{bmatrix} \times
+  \begin{bmatrix}
+    c_1 \\ c_2 \\ c_3 \\ ... \\ c_n
+  \end{bmatrix} =
+  \begin{bmatrix}
+    s_1 \\ s_2 \\ s_3 \\ ... \\ s_n
+  \end{bmatrix}
+\end{equation}
+
+Here we have the Vandermond Matrix of a set of N values for X times the coefficient vector gives the samples vector. We decided to choose our values in X as such:
+$ X = \{ 1, \omega_n, \omega_n^2, \omega_n^3, ..., \omega_n^{n-1} \} $.
+
+\subsection{Inverse Fourier Transform}
+
+\begin{equation}
+  \begin{bmatrix}
+    1 & 1 & 1 & 1 & ... & 1 \\
+    1 & \omega_n^1 & \omega_n^2 & \omega_n^3 & ... & \omega_n^{ n-1} \\
+    1 & \omega_n^2 & \omega_n^4 & \omega_n^6 & ... & \omega_n^{2n-2} \\
+    ... & ... & ... & ... & ... & ... \\
+    1 & \omega_n^{n-1} & \omega_n^{2n-2} & \omega_n^{3n-3} & ... & \omega_n^{(n-1)(n-1)} \\
+  \end{bmatrix} ^{-1} \times
+  \begin{bmatrix}
+    s_1 \\ s_2 \\ s_3 \\ ... \\ s_n
+  \end{bmatrix} =
+  \begin{bmatrix}
+    c_1 \\ c_2 \\ c_3 \\ ... \\ c_n
+  \end{bmatrix}
+\end{equation}
+Here is the definition of the operation. We are going from samples to coefficient, so we need multiplication by inverse of the matrix for Fourier. This is easy, because the inverse is just the complex conjugate divided by n.
+\begin{equation}
+  V^{-1} = \bar{V} / n
+\end{equation}
+
+So we can use the FFT Algorithm again, this time with $X = {1, \bar{\omega}^1, \bar{\omega}^2, \bar{\omega}^3, ..., \bar{\omega}^n}$. And divide the answer by n. Note that X is still the same set, so no change to FFT is needed.

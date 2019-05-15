@@ -1,11 +1,14 @@
-\chapter{Handling Range Queries}
+\chapter{Range Queries}
 
 
 
 \section{Square Root Decomposition}
 
+Break the array down into chunks of $\sqrt{n}$. Store the answer to these chunks. The answer to range queries is the answer in the starting chunk after L, plus in the ending chunk before R, plus the stored results of everything in between. Updates can be done in $O(\sqrt{n})$ steps by just updating the result of the chunk.
 
 \subsection{Motivating Examples}
+
+This cannot be solved by a Segment Tree (easily).
 
 \begin{example}{q-rmq-01}
     \textbf{Question: Given and array, support update and query operation for number of elements less than k in the given range.} \\
@@ -16,8 +19,14 @@
 
 \section{Mo's Algorithm}
 
+This is an algorithm to handle offline queries by sorting them and trying to cleverly avoid recomputing portions that were already solved \relax for in the previous queries.
+(Direcly usable with associative, commutative, invertible operations).
+
+\subsubsection{Algorithm}
+Break down the array in blocks of size $\sqrt{n}$. Sort queries by starting block, them by ending position. The right pointer keeps moving forward for each block, the left pointer keeps moving back and forth withing a block, adding elements as it goes back and subtracting as it goes forth. This results in all queries being solved in $O(n\sqrt{n})$ time.
+
 \begin{example}{q-rmq-02}
-    \textbf{Question: Given an array, find the number of elements distinct elements in range (l, r).} \\
+    \textbf{Question: Given an array, find the number of elements distinct elements in range (l, r).}
     Sort the queries first by the starting block, then by the end position. Maintian a frequency array of all elements currently between right and left pointers. For each of the $O(\sqrt{n})$ blocks, the start pointer moves atmost $O(\sqrt{n})$ times back and forth in the block, adding and deleting elements. For each block the right pointer only goes forward adding in elements, $O(\sqrt{n})$ blocks each taking $O(n)$ time.
 \end{example}
 
@@ -25,3 +34,11 @@
     \textbf{Question: Given an array, find the f(s)*f(s)*s for all distinct s in range (l, r), where f(s) is the frequency of s.} \\
     Same Algorithm, and same frequency array as above, just find $f(s)*f(s)*s$ instead of $\delta(f(s))$ as above.
 \end{example}
+
+
+
+\section{Segment Trees}
+
+\subsection{Iterative Implementation}
+
+\lstinputlisting[basicstyle=Large,style=cpp]{code/SegmentTree.hpp}
