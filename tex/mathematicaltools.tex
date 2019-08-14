@@ -1,6 +1,7 @@
 \chapter{Mathematical Tools}
 
 
+% Fast Fourier Transforms
 
 \section{Fast Fourier Transforms}
 
@@ -78,4 +79,56 @@ Here is the definition of the operation. We are going from samples to coefficien
   V^{-1} = \bar{V} / n
 \end{equation}
 
-So we can use the FFT Algorithm again, this time with $X = {1, \bar{\omega}^1, \bar{\omega}^2, \bar{\omega}^3, ..., \bar{\omega}^n}$. And divide the answer by n. Note that X is still the same set, so no change to FFT is needed.
+So we can use the FFT Algorithm again, since $X = {1, \bar{\omega}^1, \bar{\omega}^2, \bar{\omega}^3, ..., \bar{\omega}^n}$. And divide the answer by n. Note that X is still the same set, so no change to FFT is needed.
+
+
+\subsection{Number Theoretic Transforms}
+
+The number theoretic transform is based on generalizing the n-th primitive root of unity to a "quotient ring" instead of the usual field of complex numbers.
+
+We take a number $w$ that satisfies $w^n \equiv 1 (mod p)$ going through each of the numbers only and atmost once. 
+
+
+\subsection{Code Sample}
+
+\lstinputlisting[basicstyle=Large,style=cpp]{code/FastFourier.hpp}
+
+
+
+
+\section{Group Theory}
+
+
+\subsection{Burnside's Lemma}
+
+It states the number of elements in the Orbit of a When a Group G acts on a Set X is the mean of the number of unique elements in the subgroup due to
+\begin{equation}
+  \vert X / G \vert = \frac{1}{\vert G \vert} \sum_{g \in G} \vert X^g \vert
+\end{equation}
+where $X^g$ is the number of elements in set X fixed by the element g, 
+
+
+
+\section{Number Theory}
+
+
+\subsection{Stern-Brocot Tree}
+
+It is a \textbf{Binary Search Tree} of Fractions such than the path from the root to any number, is an incrementally closer set of approximations (Continued Fraction approximations) to that number.
+
+Notation: we represent the continued fraction as an array.
+\begin{equation*}
+  a_0 + \frac{1}{a_1 + \frac{1}{... + \frac{1}{k}}} = [a_0; a_1, ..., a_k]
+\end{equation*}
+This representation is not unique, since
+$[a_0; a_1, ..., a_k] = [a_0, a_1, ..., a_k - 1, 1]$ because $\frac{1}{a_k} = \frac{1}{(a_k-1) + \frac{1}{1}}$
+
+\subsubsection{Parent-Child Relations}
+Parent of $ [a_0, a_1, ..., a_k] $ is $ [a_0, a_1, ..., a_k-1] $ \\
+Children of $[a_0, a_1, ..., a_k]$ are $[a_0, a_1, ..., a_k-1, 2]$ and $[a_0, a_1, ..., a_k+1]$.
+
+
+\subsection{Divisors}
+
+\subsubsection{List of all divisors}
+The list of all divisors, when sorted, has pair such that $factor[i] * factor[n-i-1] == number$.
