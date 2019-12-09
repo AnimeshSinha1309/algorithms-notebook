@@ -18,3 +18,22 @@ The focus of this chapter would be to enlist all the optimizations to a DP possi
 
 \section{Bitmasks}
 
+
+\subsection{Classical Bitmasks}
+
+The idea is trivial, we take each bitmask to represent an arbitrary subset of any given set.
+
+
+\subsection{Sum over Subsets}
+
+We want to sum for each mask, some given function (as an array) for all it's submasks.
+We can take each mask to start off, and then go down a series of all it's subsets in decreasing order of value of mask, the algorithm for this will be $j = (j - 1)\;\&\;mask$, initially $j_0 = mask$.
+
+Time complexity is the following:
+\begin{equation}
+    T(n) = \sum_{k=0}^{n-1} C^n_k 2^k = 3^k 
+\end{equation}
+
+\begin{example}
+    Find the number of ways in the given array of $10^6$ numbers
+\end{example}

@@ -6,63 +6,40 @@
 
 using namespace std;
 
-class SearchString
-{
-private:
-    vector<long> backTableKMP;
+class KMPstring {
+    string pattern;
+    vll lps;
 
-public:
-    string str;
-
-    explicit SearchString(string st)
-    {
-        str = std::move(st);
-        // KMP String Search Pre-processing
-        backTableKMP = *new vector<long>(10);
-        backTableKMP[0] = -1;
-        long i = 0, j = -1;
-        while (i < str.size())
-        {
-            while (j >= 0 && str[i] != str[j])
-                j = backTableKMP[j];
-            i++;
-            j++;
-            backTableKMP[i] = j;
+   public:
+    explicit KMPstring(const string &pattern) {
+        this->pattern = pattern;
+        ll m = pattern.size();
+        lps = vll(m + 1, 0);
+        ll i = 0, j = -1;
+        lps[0] = -1;
+        while (i < m) {
+            while (j >= 0 && pattern[i] != pattern[j])
+                j = lps[j];
+            i++, j++;
+            lps[i] = j;
         }
     }
-
-    // Replaces each character of the string shifted by some number (Caeser Cipher)
-    string rotate(int rot)
-    {
-        string result = str;
-        for (char &ch : result)
-        {
-            if ('A' <= ch && ch <= 'Z')
-                ch = (char)(((ch - 'A') + rot) % 26) + 'A';
-            else if ('a' <= ch && ch <= 'z')
-                ch = (char)(((ch - 'a') + rot) % 26) + 'a';
-        }
-        return result;
-    }
-    // Implementation of the Knuth-Morris-Pratt String Search algortihm
-    vector<long> search(const string &text)
-    {
-        long i = 0, j = 0;
-        vector<long> positions;
-        while (i < text.size())
-        {
-            while (j > 0 && text[i] != str[j])
-                j = backTableKMP[j];
-            i++;
-            j++;
-            if (j == str.size())
-            {
-                positions.push_back(i - j);
-                j = backTableKMP[j];
+    vll match(const string &text) {
+        ll n = text.size(), m = pattern.size();
+        vll matches, m_length(n);
+        ll i = 0, j = 0;
+        while (i < n) {
+            while (j >= 0 && text[i] != pattern[j])
+                j = lps[j];
+            i++, j++;
+            m_length[i - 1] = j;
+            if (j == m) {
+                matches.push_back(i - m);
+                j = lps[j];
             }
         }
-        return positions;
+        return move(matches);  // or m_length
     }
 };
 
-#endif //CODE_SMARTSTRING_H
+#endif  // CODE_SMARTSTRING_H

@@ -1,0 +1,51 @@
+\BOOKMARK [0][-]{chapter.1}{Heaps}{}% 1
+\BOOKMARK [1][-]{section.1.1}{Question Patterns}{chapter.1}% 2
+\BOOKMARK [2][-]{subsection.1.1.1}{Generic Types}{section.1.1}% 3
+\BOOKMARK [2][-]{subsection.1.1.2}{Specific Illustrations}{section.1.1}% 4
+\BOOKMARK [1][-]{section.1.2}{Elementary Theory}{chapter.1}% 5
+\BOOKMARK [2][-]{subsection.1.2.1}{Basic Operations}{section.1.2}% 6
+\BOOKMARK [2][-]{subsection.1.2.2}{Implementation Code}{section.1.2}% 7
+\BOOKMARK [0][-]{chapter.2}{Range Queries}{}% 8
+\BOOKMARK [1][-]{section.2.1}{Square Root Decomposition}{chapter.2}% 9
+\BOOKMARK [2][-]{subsection.2.1.1}{Motivating Examples}{section.2.1}% 10
+\BOOKMARK [1][-]{section.2.2}{Mo's Algorithm}{chapter.2}% 11
+\BOOKMARK [1][-]{section.2.3}{Segment Trees}{chapter.2}% 12
+\BOOKMARK [2][-]{subsection.2.3.1}{Iterative Implementation}{section.2.3}% 13
+\BOOKMARK [0][-]{chapter.3}{Dynamic Programming}{}% 14
+\BOOKMARK [1][-]{section.3.1}{Matrix Exponentiation}{chapter.3}% 15
+\BOOKMARK [1][-]{section.3.2}{Bitmasks}{chapter.3}% 16
+\BOOKMARK [2][-]{subsection.3.2.1}{Classical Bitmasks}{section.3.2}% 17
+\BOOKMARK [2][-]{subsection.3.2.2}{Sum over Subsets}{section.3.2}% 18
+\BOOKMARK [0][-]{chapter.4}{Game Theory}{}% 19
+\BOOKMARK [1][-]{section.4.1}{NIM Games and Sprague-Grundy Theorem}{chapter.4}% 20
+\BOOKMARK [1][-]{section.4.2}{Take Away Games}{chapter.4}% 21
+\BOOKMARK [2][-]{subsection.4.2.1}{Identifying the Losing States}{section.4.2}% 22
+\BOOKMARK [2][-]{subsection.4.2.2}{A few Example Functions}{section.4.2}% 23
+\BOOKMARK [2][-]{subsection.4.2.3}{Winning Strategy}{section.4.2}% 24
+\BOOKMARK [2][-]{subsection.4.2.4}{Proof of Victory}{section.4.2}% 25
+\BOOKMARK [2][-]{subsection.4.2.5}{References}{section.4.2}% 26
+\BOOKMARK [1][-]{section.4.3}{Finding Invarients}{chapter.4}% 27
+\BOOKMARK [0][-]{chapter.5}{Mathematical Tools}{}% 28
+\BOOKMARK [1][-]{section.5.1}{Fast Fourier Transforms}{chapter.5}% 29
+\BOOKMARK [2][-]{subsection.5.1.1}{Motivation and Purpose}{section.5.1}% 30
+\BOOKMARK [2][-]{subsection.5.1.2}{Algorithm}{section.5.1}% 31
+\BOOKMARK [2][-]{subsection.5.1.3}{Some Mathematical Representations}{section.5.1}% 32
+\BOOKMARK [2][-]{subsection.5.1.4}{Inverse Fourier Transform}{section.5.1}% 33
+\BOOKMARK [2][-]{subsection.5.1.5}{Number Theoretic Transforms}{section.5.1}% 34
+\BOOKMARK [2][-]{subsection.5.1.6}{Code Sample}{section.5.1}% 35
+\BOOKMARK [1][-]{section.5.2}{Group Theory}{chapter.5}% 36
+\BOOKMARK [2][-]{subsection.5.2.1}{Burnside's Lemma}{section.5.2}% 37
+\BOOKMARK [1][-]{section.5.3}{Number Theory}{chapter.5}% 38
+\BOOKMARK [2][-]{subsection.5.3.1}{Stern-Brocot Tree}{section.5.3}% 39
+\BOOKMARK [2][-]{subsection.5.3.2}{GCD and Divisors}{section.5.3}% 40
+\BOOKMARK [1][-]{section.5.4}{Geometry}{chapter.5}% 41
+\BOOKMARK [2][-]{subsection.5.4.1}{Graham Scan for Convex Hull}{section.5.4}% 42
+\BOOKMARK [0][-]{chapter.6}{Graphs and Tree}{}% 43
+\BOOKMARK [1][-]{section.6.1}{Trees}{chapter.6}% 44
+\BOOKMARK [2][-]{subsection.6.1.1}{Heavy Light Decomposition}{section.6.1}% 45
+\BOOKMARK [1][-]{section.6.2}{Basic Algorithms on Graphs}{chapter.6}% 46
+\BOOKMARK [2][-]{subsection.6.2.1}{List of algorithms}{section.6.2}% 47
+\BOOKMARK [2][-]{subsection.6.2.2}{Code}{section.6.2}% 48
+\BOOKMARK [0][-]{chapter.7}{Problem Solving Strategies}{}% 49
+\BOOKMARK [1][-]{section.7.1}{General Advice and Basic Patters}{chapter.7}% 50
+\BOOKMARK [1][-]{section.7.2}{List of Algorithms and Ideas we know}{chapter.7}% 51
