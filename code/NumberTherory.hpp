@@ -79,30 +79,33 @@ class Multiplicative {
    public:
     ll size;
     vector<ll> fn;
-    vector<ll> _primes;
-    vector<ll> _lowest_prime_factor;
+    vector<ll> primes;
+    vector<ll> lowest_prime_factor;
 
     Multiplicative(ll size) {
         size = size;
-        _lowest_prime_factor = vector<ll>(size, 0);
+        lowest_prime_factor = vector<ll>(size, 0);
         fn = vector<ll>(size, 0);
         // https://stackoverflow.com/questions/34260399
         // linear sieve
         for (ll i = 2; i < size; i++)
-            _lowest_prime_factor[i] = i;
+            lowest_prime_factor[i] = i;
         // put any specific initialization code here like
         // multiplicativeFn[1] = 1;
         for (ll i = 2; i < size; i++) {
-            if (_lowest_prime_factor[i] == i) {
+            if (lowest_prime_factor[i] == i) {
                 fn[i] = fn_prime_values(i);
-                _primes.push_back(i);
+                primes.push_back(i);
             }
-            for (auto p : _primes) {
+
+            for (auto p : primes) {
                 ll ith_multiple = i * p;
                 if (ith_multiple >= size)
                     break;
-                _lowest_prime_factor[ith_multiple] =
-                    min(_lowest_prime_factor[i], p);
+
+                lowest_prime_factor[ith_multiple] =
+                    min(lowest_prime_factor[i], p);
+
                 if (i % p) {
                     fn[ith_multiple] = fn[i] * fn[p];
                 } else {
