@@ -339,10 +339,12 @@ class ImplicitSegupdate {
         if (x == p && y == p + 1) {
             return node->data;
         }
-        0 if (x <= p && p < (x + y) / 2) return _setter(
-            node->data, query(p, node->l_child(), x, (x + y) / 2));
-        else return _setter(node->data,
-                            query(p, node->r_child(), (x + y) / 2, y));
+        if (x <= p && p < (x + y) / 2)
+            return _setter(node->data,
+                           query(p, node->l_child(), x, (x + y) / 2));
+        else
+            return _setter(node->data,
+                           query(p, node->r_child(), (x + y) / 2, y));
     }
 };
 
