@@ -1,3 +1,5 @@
+#include <template.hpp>
+
 class Graph {
    public:
     enum NodeColor { VISITED, VISITING, UNVISITED };
@@ -22,22 +24,18 @@ class Graph {
     pair<vll, vll> dijkstra(vll from) {
         vll dist(n, INT64_MAX), parent(n, INT32_MAX);
         priority_queue<pll, vpl, greater<>> q;
-        for (auto index : from) {
-            dist[index] = 0;
-            q.emplace(index, 0);
-        }
+        for (auto index : from)
+            dist[index] = 0, q.emplace(0, index);
         while (!q.empty()) {
             pll top = q.top();
             q.pop();
-            if (top.second > dist[top.first])
+            if (top.first > dist[top.second])
                 continue;
-            for (auto edge : list[top.first].adjacent) {
-                if (top.second + edge.second < dist[edge.first]) {
-                    dist[edge.first] = top.second + edge.second;
-                    parent[edge.first] = top.first - 1;
-                    q.emplace(edge.first, top.second + edge.second);
-                }
-            }
+            for (auto edge : list[top.second].adjacent)
+                if (top.first + edge.second < dist[edge.first])
+                    dist[edge.first] = top.first + edge.second,
+                    parent[edge.first] = top.second,
+                    q.emplace(top.first + edge.second, edge.first);
         }
         return {dist, parent};
     }
@@ -84,13 +82,11 @@ class Graph {
             while (!process.empty()) {
                 ll processing = process.top();
                 process.pop();
-                for (pll neighbor : list[processing].adjacent) {
-                    if (!visited[neighbor.first]) {
-                        process.push(neighbor.first);
-                        component.push_back(neighbor.first);
-                        visited[neighbor.first] = true;
-                    }
-                }
+                for (pll neighbor : list[processing].adjacent)
+                    if (!visited[neighbor.first])
+                        process.push(neighbor.first),
+                            component.push_back(neighbor.first),
+                            visited[neighbor.first] = true;
             }
             result.push_back(component);
         }

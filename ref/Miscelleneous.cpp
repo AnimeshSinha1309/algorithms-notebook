@@ -1,3 +1,5 @@
+#include <template.hpp>
+
 ll binary_search(ll TOP, ll BOT, function<bool(ll)> check) {
     ll result = 0;
     for (ll top = 1e5, bot = 0, mid = bot + (top - bot) / 2; bot <= top;
@@ -50,5 +52,6 @@ void sort(int A[], int start, int end) {
 #include <ext/pb_ds/assoc_container.hpp>
 #include <ext/pb_ds/tree_policy.hpp>
 using namespace __gnu_pbds;
-typedef ordered_set tree<int, null_type, less<int>, rb_tree_tag,
-                         tree_order_statistics_node_update>;
+typedef tree<int, null_type, less<int>, rb_tree_tag,
+             tree_order_statistics_node_update>
+    ordered_set;

@@ -1,3 +1,5 @@
+#include <template.hpp>
+
 class LineContainer {
    private:
     struct Line {
@@ -52,3 +54,11 @@ class LineContainer {
         return (l.slope * x + l.constt) * (__is_max_query ? 1 : -1);
     }
 };
+
+void dp_sos(vll &arr) {
+    const int bitsize = 20;
+    for (int i = 0; i < bitsize; ++i)
+        for (int mask = 0; mask < (1 << bitsize); ++mask)
+            if (mask & (1 << i))
+                arr[mask] += arr[mask ^ (1 << i)];
+}
