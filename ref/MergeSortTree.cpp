@@ -1,20 +1,21 @@
 #include "template.hpp"
 
 template <typename Type>
-class MergeSortTree {
-   protected:
+struct MergeSortTree {
     int size;
     vector<Type> data;
     vector<vector<int>> tree_idx;
     vector<vector<Type>> tree_val;
     long long inversions;
 
-    vector<pair<int, Type>> merge(const vector<int> &arr1,
-                                  const vector<int> &arr2) {
+    template <typename DataType>
+    vector<DataType> merge(const vector<DataType> &arr1,
+                           const vector<DataType> &arr2) {
         int n = arr1.size(), m = arr2.size();
-        vector<pair<int, Type>> result(n + m);
+        vector<DataType> result;
+        result.reserve(n + m);
         for (int x = 0, y = 0; x < n || y < m;) {
-            if (x < n && (y >= m || data[arr1[x]] <= data[arr2[y]]))
+            if (x < n && (y >= m || arr1[x] <= arr2[y]))
                 result.push_back(arr1[x++]);
             else
                 result.push_back(arr2[y++]), inversions += n - x;
@@ -26,19 +27,26 @@ class MergeSortTree {
         return lower_bound(arr.begin(), arr.end(), value) - arr.begin();
     }
 
-   public:
     explicit MergeSortTree(const vector<Type> &list) {
         for (size = 1; size < list.size(); size *= 2)
             ;
-        tree_idx.resize(2 * size);
+        // Make a tree based on the values
         tree_val.resize(2 * size);
+        data = vector<Type>(list);
         for (int i = 0; i < list.size(); i++)
-            tree_idx[i + size].emplace_back(i, list[i]);
+            tree_val[i + size].push_back(i);
         for (int i = size - 1; i > 0; --i)
-            tree_idx[i] = merge(tree[i << 1], tree[i << 1 | 1]);
-        for (int i = 0; i < 2 * size; i++)
-            for (int el : tree_idx[i])
-                tree_val[i].push_back(data[el]);
+            tree_val[i] = merge<Type>(tree_val[i << 1], tree_val[i << 1 | 1]);
+        // Make a tree based on the indices
+        tree_idx.resize(2 * size);
+        vector<pair<Type, int>> convert(list.size());
+        for (int i = 0; i < list.size(); i++)
+            convert[i].first = list[i], convert[i].second = i;
+        sort(convert.begin(), convert.end());
+        for (int i = 0; i < list.size(); i++)
+            tree_idx[i + size].push_back(convert[i].second);
+        for (int i = size - 1; i > 0; --i)
+            tree_idx[i] = merge<int>(tree_idx[i << 1], tree_idx[i << 1 | 1]);
     }
 
     int order_of_key(int l, int r, Type value) {
@@ -63,9 +71,9 @@ class MergeSortTree {
                                   tree_idx[2 * node].begin();
         int first_in_query_range = lower_bound(tree_idx[2 * node].begin(),
                                                tree_idx[2 * node].end(), l) -
-                                  tree_idx[2 * node].begin());
+                                   tree_idx[2 * node].begin();
         int m = last_in_query_range - first_in_query_range;
-        if (m >= k)
+        if (m >= order)
             return key_of_order(l, r, order, node << 1, x, (x + y) / 2);
         else
             return key_of_order(l, r, order - m, node << 1 | 1, (x + y) / 2, y);

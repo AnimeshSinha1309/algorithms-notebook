@@ -11,6 +11,8 @@ typedef vector<long double> vld;
 typedef vector<vector<long double>> mld;
 typedef vector<bool> vbl;
 typedef vector<vector<bool>> mbl;
+typedef complex<double> cd;
+typedef vector<complex<double>> vcd;
 #define minimize(a, b) (a = min(a, b))
 #define maximize(a, b) (a = max(a, b))
 const long long MOD = 1e9 + 7;

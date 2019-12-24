@@ -1,7 +1,7 @@
 #include "template.hpp"
 
 class PalindromicTree {
-    const static long long MAXN = 1000;
+    const static long long MAXN = 100000;
 
    public:
     struct Node {

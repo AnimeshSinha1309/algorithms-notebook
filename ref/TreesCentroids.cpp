@@ -1,13 +1,13 @@
+#include "template.hpp"
+
 class Tree {
    public:
     struct Node {
         vector<Node *> adjacent;
         Node *parent = nullptr;
-        long long start_time = 0, end_time = 0, subtree_size = 1;
-        unsigned long depth = 0, height = 0;
-        unsigned long index = INT32_MAX;
+        int start_time = 0, end_time = 0, subtree_size = 1;
+        int depth = 0, height = 0, index = INT32_MAX;
     };
-
     vector<Node> list;
     Node *root = nullptr;
     vector<vector<Node *>> __anc;
@@ -81,12 +81,10 @@ class Tree {
     }
 };
 
-class CentroidTree : public Tree {
-   private:
+struct CentroidTree : Tree {
     vector<bool> __visited;
     vector<int> __dir_parents, __subtree_size;
     Tree base;
-
     void __dfs_centroid(int node) {
         __subtree_size[node] = 1;
         for (Node *next : base.list[node].adjacent)
@@ -96,7 +94,6 @@ class CentroidTree : public Tree {
                 __subtree_size[node] += __subtree_size[next->index];
             }
     }
-
     int __get_centroid(int x) {
         __dir_parents[x] = 0;
         __dfs_centroid(x);
@@ -112,7 +109,6 @@ class CentroidTree : public Tree {
                 return x;
         }
     }
-
     void __build_centroid(int node, Node *parent) {
         node = __get_centroid(node);
         list[node].parent = parent;
@@ -121,8 +117,6 @@ class CentroidTree : public Tree {
             if (!__visited[next->index])
                 __build_centroid(next->index, &list[node]);
     }
-
-   public:
     CentroidTree(Tree &tree) : Tree((int)tree.list.size()) {
         __visited = vector<bool>(tree.list.size());
         __subtree_size = vector<int>(tree.list.size());
@@ -149,18 +143,14 @@ ll diameter(Tree tree) {
     while (!q.empty()) {
         auto node = q.front();
         q.pop();
-        if (node.second < distance_max) {
-            distance_max = node.second;
-            node_max = node.first;
-        }
-
-        for (auto neighbor : tree.list[node.first].adjacent) {
+        if (node.second < distance_max)
+            distance_max = node.second, node_max = node.first;
+        for (auto neighbor : tree.list[node.first].adjacent)
             if (!visited[neighbor->index]) {
                 auto d = node.second + 1;
                 q.push({neighbor->index, d});
                 visited[neighbor->index] = 1;
             }
-        }
     }
     visited = vbl(n + 1, false);
     q.push({node_max, 0});
@@ -169,12 +159,63 @@ ll diameter(Tree tree) {
         auto node = q.front();
         q.pop();
         maximize(distance_max, node.second);
-        for (auto neighbor : tree.list[node.first].adjacent) {
+        for (auto neighbor : tree.list[node.first].adjacent)
             if (!visited[neighbor->index]) {
                 auto d = node.second + 1;
                 q.push({neighbor->index, d});
                 visited[neighbor->index] = 1;
             }
-        }
     }
 }
+
+struct HeavyLightDecomp : Tree {
+    int chain_count = 1, narr;
+    vector<int> subtree_size, chain, chain_head, chain_next;
+    function<ll(int, int, ll)> answer;
+    vector<int> pos;
+
+    HeavyLightDecomp(int n, function<ll(int, int, ll)> &ans) : Tree(n) {
+        subtree_size.resize(n);
+        pos.resize(n);
+        chain.resize(n);
+        chain_head.resize(n);
+        chain_next.resize(n);
+        answer = ans;
+    }
+
+    void decompose(int node = 0, int parent = -1) {
+        pos[node] = ++narr, chain[node] = chain_count;
+        int big = 0;
+        for (Node *adj : list[node].adjacent) {
+            int u = adj->index;
+            if (u == parent)
+                continue;
+            else if (!big)
+                big = u;
+            else if (subtree_size[u] > subtree_size[big])
+                big = u;
+        }
+        if (big)
+            decompose(big, node);
+        for (Node *adj : list[node].adjacent) {
+            int u = adj->index;
+            if (u == parent || u == big)
+                continue;
+            ++chain_count, chain_head[chain_count] = u,
+                           chain_next[chain_count] = node;
+            decompose(u, node);
+        }
+    }
+    // Build Segment Tree using indices of pos array
+    // Update ans using Range queries on said segment tree
+    int query_up(int r, int q) {
+        int ans = 0, t;
+        while (chain[q] != chain[r]) {
+            t = chain[q];
+            ans = answer(pos[chain_head[t]], pos[q], ans);
+            q = chain_next[t];
+        }
+        ans = answer(pos[r], pos[q], ans);
+        return ans;
+    }
+};
