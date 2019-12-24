@@ -116,11 +116,13 @@ class Graph {
     pair<vll, vll> bellman_ford(vll from) {
         vll distances(n, INT64_MAX);
         vll parent(n, INT32_MAX);
-        // Bellman Ford Algorithm
+
         for (ll &i : from)
             distances[i] = 0;
+
+        // relax all |E| edges, |V| - 1 times
         for (int i = 0; i < n - 1; i++) {
-            for (int source = 0; source < n - 1; source++) {
+            for (int source = 0; source <= n - 1; source++) {
                 if (distances[source] == INT64_MAX)
                     continue;
                 for (const auto &edge : list[source].adjacent) {
@@ -132,8 +134,9 @@ class Graph {
                 }
             }
         }
+
         // Checking for negative cycles and putting -1 if it exists.
-        for (ll source = 0; source < n - 1; source++) {
+        for (ll source = 0; source <= n - 1; source++) {
             for (const auto &edge : list[source].adjacent) {
                 ll sink = edge.first;
                 if (distances[source] + edge.second < distances[sink]) {
