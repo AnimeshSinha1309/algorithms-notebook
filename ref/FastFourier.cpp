@@ -1,3 +1,5 @@
+#include <template.hpp>
+
 class Polynomial {
     static const int root = 973800541;
     static const int root_1 = 595374802;
@@ -23,10 +25,7 @@ class Polynomial {
         coeff = coefficients;
         this->resize(order);
     }
-    Polynomial(const Polynomial &copy) {
-        order = copy.order;
-        coeff = vll(copy.coeff);
-    }
+
     void resize(int order) {
         int size;
         for (size = 1; size < order + 1; size *= 2)
@@ -69,18 +68,14 @@ class Polynomial {
     friend Polynomial operator*(const Polynomial &a, const Polynomial &b) {
         Polynomial x(a), y(b);
         int order = a.order + b.order;
-        x.resize(order);
-        y.resize(order);
-        x.ntt();
-        y.ntt();
+        x.resize(order), y.resize(order);
+        x.ntt(), y.ntt();
         int size = x.coeff.size();
         vll poly(size);
-        for (int i = 0; i < size; i++) {
+        for (int i = 0; i < size; i++)
             poly[i] = (x.coeff[i] * y.coeff[i]) % MOD;
-        }
         Polynomial res(poly);
-        res.ntt(true);
-        res.order = order;
+        res.ntt(true), res.order = order;
         return res;
     }
 
@@ -94,8 +89,15 @@ class Polynomial {
         for (int i = 0; i < size; i++)
             poly[i] = __mod_pow(x.coeff[i], pow);
         Polynomial res(poly);
-        res.ntt(true);
-        res.order = order;
+        res.ntt(true), res.order = order;
         return res;
     }
 };
+
+int main() {
+    Polynomial a({1, 2, 3});
+    Polynomial b({1, 1});
+    Polynomial c = a * b;
+    for (int i = 0; i <= c.order; i++)
+        cout << c.coeff[i] << endl;
+}

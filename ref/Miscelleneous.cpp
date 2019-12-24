@@ -1,4 +1,4 @@
-#include <template.hpp>
+#include "template.hpp"
 
 ll binary_search(ll TOP, ll BOT, function<bool(ll)> check) {
     ll result = 0;

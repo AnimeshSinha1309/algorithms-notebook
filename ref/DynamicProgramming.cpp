@@ -11,7 +11,6 @@ class LineContainer {
             return p < x;
         }
     };
-
     multiset<Line, less<>> lines;
     // (for doubles, use inf = 1/.0, div(a,b) = a/b)
     bool __is_max_query = false;

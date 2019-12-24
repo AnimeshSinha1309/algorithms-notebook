@@ -1,4 +1,4 @@
-#include <template.hpp>
+#include "template.hpp"
 
 class Dinics {
    public:

@@ -1,3 +1,5 @@
+#include <template.hpp>
+
 struct DisjointSetTree {
     ll comp_count;
     vector<ll> parent, comp_size;

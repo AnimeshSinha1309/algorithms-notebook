@@ -1,3 +1,5 @@
+#include "template.hpp"
+
 class Multiplicative {
 // This is the definition for PHI
 #define fn_prime_values(prime) (prime - 1)
