@@ -7,31 +7,29 @@
 #include <vector>
 using namespace std;
 
-// The full Polynomial Class with fast NTT
-
-typedef long long ll;
-typedef vector<long long> vll;
+// use llround(a[i].real()) when printing FFT output
 
 const double PI = acos(-1);
 
 #ifdef IS_FFT
 using cd = complex<double>;
 #else
-using cd = ll;
+using cd = int;
 #endif
 
 class Polynomial {
     static const int root = 565042129;
     static const int root_1 = 950391366;
     static const int root_pw = 1 << 20;
-    static const ll mod = 998244353;
+    static const int mod = 998244353;
 
-    static ll __mod_pow(ll a, ll n) {
+    static int __mod_pow(int a, int n) {
         int res = 1;
+
         for (a %= mod; n > 0; n >>= 1) {
             if (n & 1)
-                res = (res * 1ll * a) % mod;
-            a = (a * 1ll * a) % mod;
+                res = (int)((1LL * res * a) % mod);
+            a = (int)((a * 1ll * a) % mod);
         }
         return res;
     }
@@ -39,29 +37,25 @@ class Polynomial {
    public:
     int order;
     vector<cd> coeff;
-#ifdef IS_FFT
-    explicit Polynomial(vector<cd> coefficients) {
-        order = coefficients.size();
-        coeff = coefficients;
+
+    explicit Polynomial() : order(0), coeff(vector<cd>(0)) {
     }
-#else
-    explicit Polynomial(vector<ll> coefficients) {
-        order = coefficients.size();
-        coeff = coefficients;
+
+    explicit Polynomial(vector<cd> coefficients)
+        : order((int)coefficients.size()), coeff(coefficients) {
     }
-#endif
-    Polynomial(const Polynomial &copy) {
-        order = copy.order;
-        coeff = vector<cd>(copy.coeff);
+
+    Polynomial(const Polynomial &copy)
+        : order(copy.order), coeff(vector<cd>(copy.coeff)) {
     }
-    void resize(int order) {
-        int size = 1ll << (ll)ceil(log2(order));
-        coeff.resize(size);
+    void resize(int nOrder) {
+        int size = 1 << (ll)ceil(log2(nOrder));
+        coeff.resize(size, 0);
     }
 
 #ifdef IS_FFT
     void fft(bool invert = false) {
-        int n = coeff.size();
+        int n = (int)coeff.size();
 
         for (int i = 1, j = 0; i < n; i++) {
             int bit = n >> 1;
@@ -94,7 +88,7 @@ class Polynomial {
     }
 #else
     void fft(bool invert = false) {
-        int n = coeff.size();
+        int n = (int)coeff.size();
 
         for (int i = 1, j = 0; i < n; i++) {
             int bit = n >> 1;
@@ -125,7 +119,7 @@ class Polynomial {
 
         if (invert) {
             int n_1 = __mod_pow(n, mod - 2);
-            for (cd &x : coeff)
+            for (auto &x : coeff)
                 x = (int)(1LL * x * n_1 % mod);
         }
     }
@@ -135,38 +129,32 @@ class Polynomial {
         Polynomial x(a), y(b);
 
         int order = a.order + b.order;
-        order = 1ll << (ll)ceil(log2(order));
+        order = 1 << (ll)ceil(log2(order));
         x.resize(order);
         y.resize(order);
 
         x.fft();
         y.fft();
 
-        vector<cd> poly(order);
         for (int i = 0; i < order; i++) {
-#ifdef FFT
-            poly[i] = (x.coeff[i] * y.coeff[i]);
+#ifdef IS_FFT
+            x.coeff[i] = (x.coeff[i] * y.coeff[i]);
 #else
-            poly[i] = (x.coeff[i] * y.coeff[i]) % mod;
+            x.coeff[i] = (int)((1ll * x.coeff[i] * y.coeff[i]) % mod);
 #endif
         }
 
-        Polynomial res(poly);
-        res.fft(true);
+        x.fft(true);
 
-        for (ll i = 0; i < order; i++) {
-            cout << res.coeff[i] << " ";
-        }
-
-        return res;
+        return x;
     }
 
-    friend Polynomial operator^(const Polynomial &a, ll power) {
+    friend Polynomial operator^(const Polynomial &a, int power) {
         Polynomial x(a);
         int order = a.order * power;
         x.resize(order);
         x.fft();
-        int size = x.coeff.size();
+        int size = (int)x.coeff.size();
         vector<cd> poly(size);
         Polynomial res(poly);
 
@@ -184,4 +172,10 @@ class Polynomial {
     }
 };
 
+// Code for finding closest match by Hamming distance of r in s |r| <= |s|
+// we reverse polynomial r and multiply with s
+// for (ll i = (int)r.size() - 1 - 1; i < s.size(); i++) {
+//     res[i] += z.coeff[i]; // z is the multiplication result
+// }
+// answers contained in res[sz(r) - 1] to res[sz(s) - 1]
 #endif  // CODE_FASTFOURIER_H
