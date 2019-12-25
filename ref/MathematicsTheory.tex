@@ -1,0 +1,51 @@
+\subsection{Mobius Inversions}
+
+\begin{itemize}
+
+\item $\phi \circ I = \text{id}$ i.e. $\sum_{d|n} \phi(d)=n$. Hence, $\phi = \mu \circ \text{id}$ i.e. $\phi(d)=\sum_{d|n} \mu(d) \frac{n}{d}$
+\item Count of numbers coprime to $n$ and lesser than $n = phi(n)$ \\
+    Sum of numbers coprime to $n$ and lesser than $n$  is $\frac{n}{2}\phi(n)$ \\
+    Proved using the fact that if $x$ is coprime to $n$ then so is $n-x$ coprime to $n$. Sum over both and take average
+\item $\sum_{d|n} \mu(d)f(d)=\prod_{p|n} (1 - f(p))$ ($p$ are its prime factors)
+\item $\sum_{d|n} \mu^2(d)f(d)=\prod_{p|n} (1 + f(p))$
+\item $\phi(mn) = \frac{\phi(m)\phi(n)\gcd(m,n)}{\phi(\gcd(m,n))}$
+\item $\phi(p^a) = p^{a-1}\phi{(p)}$
+\end{itemize}
+
+\subsection{Chinese Remainder Theorem}
+
+System $x \equiv a_i(\mod m_i)$ for $i = 1, \ldots, n$, with pairwise relatively prime $m_i$ has a unique solution modulo $M = \prod m_i$
+$x=\sum_{i} a_ib_i\frac M{m_i} (\mod M)$ where $b_i$ is modular inverse of $\frac M{m_i}$ modulo $m_i$.
+
+System $x \equiv a (\mod m)$, $x \equiv b (\mod n)$ has solutions iff $a \equiv b (\mod g)$, where $g = \gcd(m, n)$. The
+solution is unique modulo $L = \frac{mn}{g}$, and equals: $x \equiv a + T (b − a)m/g \equiv b + S(a − b)n/g (\mod L)$,
+where $S$ and $T$ are integer solutions of $mT + nS = \gcd(m, n)$.
+
+Euler's theorem: $a^{\phi(n)}\equiv 1(\mod n)$, if $\gcd(a,n)=1$
+Wilson's theorem: $p$ is prime iff $(p-1)! \equiv -1(\mod p)$
+Primitive Pythagorean triple generator: $(m^2-n^2)^2 + (2mn)^2 = (m^2+n^2)^2$
+Postage stamps/McNuggets problem: Let $a$, $b$ be coprime integers. There are exactly $\frac 12(a−1)(b−1)$ numbers not of form $ax+by (x, y \geq 0)$, and the largest is $(a−1)(b−1)−1 = ab−a−b$.
+
+Fermat’s two-squares theorem: Odd prime $p$ can be represented as a sum of two squares iff
+$p \equiv 1 (\mod 4)$. A product of two sums of two squares is a sum of two squares. Thus, $n$ is a sum of
+two squares iff every prime of form $p = 4k + 3$ occurs an even number of times in $n$’s factorization.
+
+Counting Primes Fast:  To count number of primes lesser than big $n$. Use following recurrence.
+$\text{dp}[n][j] =\text{dp}[n][j + 1] + \text{dp}[n/p_j][j]$ where $dp[i][j]$ stores count of numbers lesser than equal to $i$
+having all prime divisors greater than equal to $p_j$ . Precompute this for all $i$ less than some small $k$
+and for others use the recurrence to compute in small time.
+
+Compute $P_N(x)$ in $T(n)=T(n/2)+\mathcal{O}(n\log n)\approx \mathcal{O}(n\log n)$ $P_{2N}(x) = P_{N}(x)P_{N}(x+N)$. using polynomial shifting. Say, $P_N(x) = \prod \limits_{i=1}^N (x+i) = \sum_{i=0}^N c_i.x^i$.
+Then, $P_N(x+N) = \sum_{i=0}^N h_i.x^i$, where, $h_i = \frac{1}{i!} . (\text{coefficient of } x^{N-i} in A(x)B(x))$ where, $A(x) = \sum \limits_{i=0}^{N} (c_{N-i}.(N-i)!) . x^i$, and $B(x) = \sum \limits_{i=0}^{N} \left( \frac {N^i}{i!} \right) . x^i$
+
+\begin{verbatim}
+    MUL(N) // computes (x+1)(x+2)...(x+N) in O(NlogN)
+        if N==1:
+            return (x+1)
+        C = MUL(N/2)
+        H = convolute(A,B) // use C to obtain A
+        ANS = convolute(C,H)
+        if N is odd:
+            ANS *= (x+N) // naive multiplication will do - O(N)
+        return ANS
+\end{verbatim}

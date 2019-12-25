@@ -1,41 +1,67 @@
 #include "template.hpp"
+const double PI = acos(-1);
 
-class Polynomial {
-#define NTT
-    static ll __mod_pow(ll a, ll n) {
+#ifdef IS_FFT
+    using cd = complex<double>;
+#else
+    using cd = int;
+#endif
+// use llround(a[i].real()) when printing FFT output
+struct Polynomial {
+    static const int root = 565042129;
+    static const int root_1 = 950391366;
+    static const int root_pw = 1 << 20;
+    static const int mod = 998244353;
+
+    static int __mod_pow(int a, int n) {
         int res = 1;
-        for (a %= MOD; n > 0; n >>= 1) {
-            if (n & 1)
-                res = (res * 1ll * a) % MOD;
-            a = (a * 1ll * a) % MOD;
-        }
-        return res;
+        for (a %= mod; n > 0; n >>= 1) {
+            if (n & 1) res = (int)((1LL * res * a) % mod);
+            a = (int)((a * 1ll * a) % mod);
+        } return res;
     }
-
-   public:
     int order;
-
-    explicit Polynomial(vll coefficients) {
-        order = coefficients.size() - 1;
-        this->resize(order);
-        for (int i = 0; i <= order; i++)
-            coeff[i] = coefficients[i];
+    vector<cd> coeff;
+    explicit Polynomial() : order(0), coeff(vector<cd>(0)) {
+    }
+    explicit Polynomial(vector<cd> coefficients)
+        : order((int)coefficients.size()), coeff(coefficients) {
+    }
+    Polynomial(const Polynomial &copy)
+        : order(copy.order), coeff(vector<cd>(copy.coeff)) {
+    }
+    void resize(int nOrder) {
+        int size = 1 << (ll)ceil(log2(nOrder));
+        coeff.resize(size, 0);
     }
 
-    void resize(int order) {
-        int size;
-        for (size = 1; size < order + 1; size *= 2)
-            ;
-        coeff.resize(size);
-    }
-#ifdef NTT
-    vll coeff;
+#ifdef IS_FFT
     void fft(bool invert = false) {
-        static const int root = 973800541;
-        static const int root_1 = 595374802;
-        static const int root_pw = 1 << 20;
-        static const ll MOD = 998244353;
-        int n = coeff.size();
+        int n = (int)coeff.size();
+        for (int i = 1, j = 0; i < n; i++) {
+            int bit = n >> 1;
+            for (; j & bit; bit >>= 1) j ^= bit;
+            j ^= bit;
+            if (i < j) swap(coeff[i], coeff[j]);
+        }
+        for (int len = 2; len <= n; len <<= 1) {
+            double ang = 2 * PI / len * (invert ? -1 : 1);
+            cd wlen(cos(ang), sin(ang));
+            for (int i = 0; i < n; i += len) {
+                cd w(1);
+                for (int j = 0; j < len / 2; j++) {
+                    cd u = coeff[i + j], v = coeff[i + j + len / 2] * w;
+                    coeff[i + j] = u + v;
+                    coeff[i + j + len / 2] = u - v;
+                    w *= wlen;
+                }
+            }
+        }
+        if (invert) { for (cd &x : coeff) x /= n; }
+    }
+#else
+    void fft(bool invert = false) {
+        int n = (int)coeff.size();
         for (int i = 1, j = 0; i < n; i++) {
             int bit = n >> 1;
             for (; j & bit; bit >>= 1)
@@ -47,87 +73,66 @@ class Polynomial {
         for (int len = 2; len <= n; len <<= 1) {
             int wlen = invert ? root_1 : root;
             for (int i = len; i < root_pw; i <<= 1)
-                wlen = (int)(1LL * wlen * wlen % MOD);
+                wlen = (int)(1LL * wlen * wlen % mod);
             for (int i = 0; i < n; i += len) {
                 int w = 1;
                 for (int j = 0; j < len / 2; j++) {
                     int u = coeff[i + j],
-                        v = (ll)((coeff[i + j + len / 2] * 1ll * w) % MOD);
-                    coeff[i + j] = u + v < MOD ? u + v : u + v - MOD;
-                    coeff[i + j + len / 2] = u - v >= 0 ? u - v : u - v + MOD;
-                    w = (int)((w * 1ll * wlen) % MOD);
+                        v = (int)(1LL * coeff[i + j + len / 2] * w % mod);
+                    coeff[i + j] = u + v < mod ? u + v : u + v - mod;
+                    coeff[i + j + len / 2] = u - v >= 0 ? u - v : u - v + mod;
+                    w = (int)(1LL * w * wlen % mod);
                 }
             }
         }
         if (invert) {
-            int n_1 = __mod_pow(n, MOD - 2);
-            for (ll &x : coeff)
-                x = (ll)((x * 1ll * n_1) % MOD);
+            int n_1 = __mod_pow(n, mod - 2);
+            for (auto &x : coeff)
+                x = (int)(1LL * x * n_1 % mod);
         }
-    }
-#endif
-#ifdef FFT
-    vcd coeff;
-    int reverse(int num, int lg_n) {
-        int res = 0;
-        for (int i = 0; i < lg_n; i++) {
-            if (num & (1 << i))
-                res |= 1 << (lg_n - 1 - i);
-        }
-        return res;
-    }
-    void fft(vector<cd> &a, bool invert) {
-        const ld PI = acos(-1);
-        int n = a.size();
-        int lg_n = 0;
-        while ((1 << lg_n) < n)
-            lg_n++;
-        for (int i = 0; i < n; i++)
-            if (i < reverse(i, lg_n))
-                swap(a[i], a[reverse(i, lg_n)]);
-        for (int len = 2; len <= n; len <<= 1) {
-            double ang = 2 * PI / len * (invert ? -1 : 1);
-            cd wlen(cos(ang), sin(ang));
-            for (int i = 0; i < n; i += len) {
-                cd w(1);
-                for (int j = 0; j < len / 2; j++) {
-                    cd u = a[i + j], v = a[i + j + len / 2] * w;
-                    a[i + j] = u + v;
-                    a[i + j + len / 2] = u - v;
-                    w *= wlen;
-                }
-            }
-        }
-        if (invert)
-            for (cd &x : a)
-                x /= n;
     }
 #endif
     friend Polynomial operator*(const Polynomial &a, const Polynomial &b) {
         Polynomial x(a), y(b);
         int order = a.order + b.order;
+        order = 1 << (ll)ceil(log2(order));
         x.resize(order), y.resize(order);
         x.fft(), y.fft();
-        int size = x.coeff.size();
-        vll poly(size);
-        for (int i = 0; i < size; i++)
-            poly[i] = (x.coeff[i] * y.coeff[i]) % MOD;
-        Polynomial res(poly);
-        res.fft(true), res.order = order;
-        return res;
+
+        for (int i = 0; i < order; i++) {
+#ifdef IS_FFT
+            x.coeff[i] = (x.coeff[i] * y.coeff[i]);
+#else
+            x.coeff[i] = (int)((1ll * x.coeff[i] * y.coeff[i]) % mod);
+#endif
+        }
+        x.fft(true);
+        return x;
     }
 
-    friend Polynomial operator^(const Polynomial &a, ll pow) {
+    friend Polynomial operator^(const Polynomial &a, int power) {
         Polynomial x(a);
-        int order = a.order * pow;
+        int order = a.order * power;
         x.resize(order);
         x.fft();
-        int size = x.coeff.size();
-        vll poly(size);
-        for (int i = 0; i < size; i++)
-            poly[i] = __mod_pow(x.coeff[i], pow);
+        int size = (int)x.coeff.size();
+        vector<cd> poly(size);
         Polynomial res(poly);
-        res.fft(true), res.order = order;
+#ifdef IS_FFT
+        for (int i = 0; i < size; i++)
+            poly[i] = pow(x.coeff[i], power);
+#else
+        for (int i = 0; i < size; i++)
+            poly[i] = __mod_pow(x.coeff[i], power);
+#endif
+        res.fft(true);
+        res.order = order;
         return res;
     }
 };
+
+// Code for finding closest match by Hamming distance of r in s |r| <= |s|
+// we reverse polynomial r and multiply with s
+// for (ll i = (int)r.size() - 1 - 1; i < s.size(); i++)
+//     res[i] += z.coeff[i]; // z is the multiplication result
+// answers contained in res[sz(r) - 1] to res[sz(s) - 1]
