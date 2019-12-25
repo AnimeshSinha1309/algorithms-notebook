@@ -36,3 +36,18 @@ Counting Primes Fast:  To count number of primes lesser than big $n$. Use follow
 $\text{dp}[n][j] =\text{dp}[n][j + 1] + \text{dp}[n/p_j][j]$ where $dp[i][j]$ stores count of numbers lesser than equal to $i$
 having all prime divisors greater than equal to $p_j$ . Precompute this for all $i$ less than some small $k$
 and for others use the recurrence to compute in small time.
+
+Compute $P_N(x)$ in $T(n)=T(n/2)+\mathcal{O}(n\log n)\approx \mathcal{O}(n\log n)$ $P_{2N}(x) = P_{N}(x)P_{N}(x+N)$. using polynomial shifting. Say, $P_N(x) = \prod \limits_{i=1}^N (x+i) = \sum_{i=0}^N c_i.x^i$.
+Then, $P_N(x+N) = \sum_{i=0}^N h_i.x^i$, where, $h_i = \frac{1}{i!} . (\text{coefficient of } x^{N-i} in A(x)B(x))$ where, $A(x) = \sum \limits_{i=0}^{N} (c_{N-i}.(N-i)!) . x^i$, and $B(x) = \sum \limits_{i=0}^{N} \left( \frac {N^i}{i!} \right) . x^i$
+
+\begin{verbatim}
+    MUL(N) // computes (x+1)(x+2)...(x+N) in O(NlogN)
+        if N==1:
+            return (x+1)
+        C = MUL(N/2)
+        H = convolute(A,B) // use C to obtain A
+        ANS = convolute(C,H)
+        if N is odd:
+            ANS *= (x+N) // naive multiplication will do - O(N)
+        return ANS
+\end{verbatim}
