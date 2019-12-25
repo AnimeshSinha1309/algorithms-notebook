@@ -51,3 +51,5 @@ Then, $P_N(x+N) = \sum_{i=0}^N h_i.x^i$, where, $h_i = \frac{1}{i!} . (\text{coe
             ANS *= (x+N) // naive multiplication will do - O(N)
         return ANS
 \end{verbatim}
+
+Computing $10^{18}$-th Fib number fast: use $f(2k) = f(k)^2 + f(k - 1)^2, f(2k + 1) = f(k)f(k + 1) + f(k - 1)f(k)$. This has at most $\mathcal{O}(4\log n)$ states.
