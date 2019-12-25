@@ -8,10 +8,25 @@
 using namespace std;
 typedef long long int ll;
 #define sz(x) (ll) x.size()
-const ll MOD = 1e9 + 7;
+const ll MOD = 998244353;
 
 using cd = complex<double>;
 const double PI = acos(-1);
+
+ll inverse(ll x, ll mod) {
+    ll res = 1;
+    x = x % mod;
+    ll y = mod - 2;
+
+    while (y > 0) {
+        if (y & 1)
+            res = (res * x) % mod;
+        y = y >> 1;
+        x = (x * x) % mod;
+    }
+
+    return res;
+}
 
 void fft(vector<cd> &a, bool invert = false) {
     int n = (int)a.size();
@@ -46,35 +61,8 @@ void fft(vector<cd> &a, bool invert = false) {
     }
 }
 
-template <typename T, typename A>
-void pa(vector<T, A> const &a, ll begin = 0, ll end = -1) {
-    if (end == -1)
-        end = sz(a) - 1;
-    for (ll i = begin; i <= end; i++) {
-        cout << a[i] << " ";
-    }
-    cout << endl;
-}
-
 void solve() {
-    vector<cd> pol1 = {1, 1}, pol2 = {1, 1};
-
-    ll o1 = sz(pol1), o2 = sz(pol2), o3 = o1 + o2;
-    o3 = 1ll << (ll)ceil(log2(o3));
-    pol1.resize(o3);
-    pol2.resize(o3);
-
-    fft(pol1);
-    fft(pol2);
-
-    vector<cd> pol3(o3);
-    for (ll i = 0; i < o3; i++) {
-        pol3[i] = pol2[i] * pol1[i];
-    }
-
-    fft(pol3, true);
-
-    pa(pol3);
+    cout << inverse(565042129, MOD);
 }
 
 int main(void) {

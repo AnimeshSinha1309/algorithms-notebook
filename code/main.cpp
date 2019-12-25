@@ -8,8 +8,8 @@
 using namespace std;
 
 int main() {
-    Polynomial x({1, 1});
-    Polynomial y({1, 1});
+    Polynomial x({1});
+    Polynomial y({1, 2});
     Polynomial z = x * y;
 
     return 0;

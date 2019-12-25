@@ -14,7 +14,6 @@ typedef vector<long long> vll;
 
 const double PI = acos(-1);
 
-#define IS_FFT
 #ifdef IS_FFT
 using cd = complex<double>;
 #else
@@ -22,17 +21,17 @@ using cd = ll;
 #endif
 
 class Polynomial {
-    static const int root = 973800541;
-    static const int root_1 = 595374802;
+    static const int root = 565042129;
+    static const int root_1 = 950391366;
     static const int root_pw = 1 << 20;
-    static const ll MOD = 998244353;
+    static const ll mod = 998244353;
 
     static ll __mod_pow(ll a, ll n) {
         int res = 1;
-        for (a %= MOD; n > 0; n >>= 1) {
+        for (a %= mod; n > 0; n >>= 1) {
             if (n & 1)
-                res = (res * 1ll * a) % MOD;
-            a = (a * 1ll * a) % MOD;
+                res = (res * 1ll * a) % mod;
+            a = (a * 1ll * a) % mod;
         }
         return res;
     }
@@ -48,9 +47,7 @@ class Polynomial {
 #else
     explicit Polynomial(vector<ll> coefficients) {
         order = coefficients.size();
-        for (ll i = 0; i < order; i++) {
-            coeff[i] = coefficients[i];
-        }
+        coeff = coefficients;
     }
 #endif
     Polynomial(const Polynomial &copy) {
@@ -73,7 +70,7 @@ class Polynomial {
             j ^= bit;
 
             if (i < j)
-                swap(this->coeff[i], this->coeff[j]);
+                swap(coeff[i], coeff[j]);
         }
 
         for (int len = 2; len <= n; len <<= 1) {
@@ -82,50 +79,54 @@ class Polynomial {
             for (int i = 0; i < n; i += len) {
                 cd w(1);
                 for (int j = 0; j < len / 2; j++) {
-                    cd u = this->coeff[i + j],
-                       v = this->coeff[i + j + len / 2] * w;
-                    this->coeff[i + j] = u + v;
-                    this->coeff[i + j + len / 2] = u - v;
+                    cd u = coeff[i + j], v = coeff[i + j + len / 2] * w;
+                    coeff[i + j] = u + v;
+                    coeff[i + j + len / 2] = u - v;
                     w *= wlen;
                 }
             }
         }
 
         if (invert) {
-            for (cd &x : this->coeff)
+            for (cd &x : coeff)
                 x /= n;
         }
     }
 #else
-    void ntt(bool invert = false) {
+    void fft(bool invert = false) {
         int n = coeff.size();
+
         for (int i = 1, j = 0; i < n; i++) {
             int bit = n >> 1;
             for (; j & bit; bit >>= 1)
                 j ^= bit;
             j ^= bit;
+
             if (i < j)
                 swap(coeff[i], coeff[j]);
         }
+
         for (int len = 2; len <= n; len <<= 1) {
             int wlen = invert ? root_1 : root;
             for (int i = len; i < root_pw; i <<= 1)
-                wlen = (int)(1LL * wlen * wlen % MOD);
+                wlen = (int)(1LL * wlen * wlen % mod);
+
             for (int i = 0; i < n; i += len) {
                 int w = 1;
                 for (int j = 0; j < len / 2; j++) {
                     int u = coeff[i + j],
-                        v = (ll)((coeff[i + j + len / 2] * 1ll * w) % MOD);
-                    coeff[i + j] = u + v < MOD ? u + v : u + v - MOD;
-                    coeff[i + j + len / 2] = u - v >= 0 ? u - v : u - v + MOD;
-                    w = (int)((w * 1ll * wlen) % MOD);
+                        v = (int)(1LL * coeff[i + j + len / 2] * w % mod);
+                    coeff[i + j] = u + v < mod ? u + v : u + v - mod;
+                    coeff[i + j + len / 2] = u - v >= 0 ? u - v : u - v + mod;
+                    w = (int)(1LL * w * wlen % mod);
                 }
             }
         }
+
         if (invert) {
-            int n_1 = __mod_pow(n, MOD - 2);
-            for (ll &x : coeff)
-                x = (ll)((x * 1ll * n_1) % MOD);
+            int n_1 = __mod_pow(n, mod - 2);
+            for (cd &x : coeff)
+                x = (int)(1LL * x * n_1 % mod);
         }
     }
 #endif
@@ -143,7 +144,11 @@ class Polynomial {
 
         vector<cd> poly(order);
         for (int i = 0; i < order; i++) {
+#ifdef FFT
             poly[i] = (x.coeff[i] * y.coeff[i]);
+#else
+            poly[i] = (x.coeff[i] * y.coeff[i]) % mod;
+#endif
         }
 
         Polynomial res(poly);
