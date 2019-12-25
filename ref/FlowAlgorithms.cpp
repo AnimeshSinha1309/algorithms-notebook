@@ -1,67 +1,75 @@
 #include "template.hpp"
 
-class Dinics {
-   public:
-    typedef int FT;           // can use float/doublestatic
-    const FT INF = 1e9;       // maximum capacity
-    static const FT EPS = 0;  // minimum capacity/flow change
-    int nodes, src, dest;
-    vector<int> dist, q, work;
-    struct Edge {
-        int to, rev;
-        FT f, cap;
-    };
-    vector<vector<Edge> > g;
-    bool dinic_bfs() {
-        fill(dist.begin(), dist.end(), -1);
-        dist[src] = 0;
-        int qt = 0;
-        q[qt++] = src;
-        for (int qh = 0; qh < qt; qh++) {
-            int u = q[qh];
-            for (int j = 0; j < (int)g[u].size(); j++) {
-                Edge &e = g[u][j];
-                int v = e.to;
-                if (dist[v] < 0 && e.f < e.cap)
-                    dist[v] = dist[u] + 1;
-                q[qt++] = v;
+struct Edge {
+    int u, v;
+    ll cap, flow;
+    Edge() : u(0), v(0), cap(0), flow(0) {
+    }
+    Edge(int uu, int vv, ll ccap) : u(uu), v(vv), cap(ccap), flow(0) {
+    }
+};
+struct Dinic {
+    int N;
+    vector<Edge> E;
+    vector<vector<int>> g;
+    vector<int> d, pt;
+    Dinic(int NN) : N(NN), E(0), g(N), d(N), pt(N) {
+    }
+    void addEdge(int u, int v, ll cap, ll rcap = 0) {
+        if (u != v) {
+            E.emplace_back(Edge(u, v, cap));
+            g[u].emplace_back(E.size() - 1);
+            E.emplace_back(Edge(v, u, rcap));
+            g[v].emplace_back(E.size() - 1);
+        }
+    }
+    bool BFS(int S, int T) {
+        queue<int> q({S});
+        fill(d.begin(), d.end(), N + 1);
+        d[S] = 0;
+        while (!q.empty()) {
+            int u = q.front();
+            q.pop();
+            if (u == T)
+                break;
+            for (int k : g[u]) {
+                Edge &e = E[k];
+                if (e.flow < e.cap && d[e.v] > d[e.u] + 1) {
+                    d[e.v] = d[e.u] + 1;
+                    q.emplace(e.v);
+                }
             }
         }
-        return dist[dest] >= 0;
+        return d[T] != N + 1;
     }
-    int dinic_dfs(int u, int f) {
-        if (u == dest)
-            return f;
-        for (int &i = work[u]; i < (int)g[u].size(); i++) {
-            Edge &e = g[u][i];
-            if (e.cap <= e.f)
-                continue;
-            int v = e.to;
-            if (dist[v] == dist[u] + 1) {
-                FT df = dinic_dfs(v, min(f, e.cap - e.f));
-                if (df > 0) {
-                    e.f += df, g[v][e.rev].f -= df;
-                    return df;
+
+    ll DFS(int u, int T, ll flow = -1) {
+        if (u == T || flow == 0)
+            return flow;
+        for (int &i = pt[u]; i < (int)g[u].size(); ++i) {
+            Edge &e = E[g[u][i]];
+            Edge &oe = E[g[u][i] ^ 1];
+            if (d[e.v] == d[e.u] + 1) {
+                ll amt = e.cap - e.flow;
+                if (flow != -1 && amt > flow)
+                    amt = flow;
+                if (ll pushed = DFS(e.v, T, amt)) {
+                    e.flow += pushed;
+                    oe.flow -= pushed;
+                    return pushed;
                 }
             }
         }
         return 0;
     }
-    Dinics(int n) : dist(n, 0), q(n, 0), work(n, 0), g(n), nodes(n) {
-    }  // *** s->t (cap); t->s (rcap)
-    void addEdge(int s, int t, FT cap, FT rcap = 0) {
-        g[s].push_back({t, (int)g[t].size(), 0, cap});
-        g[t].push_back({s, (int)g[s].size() - 1, 0, rcap});
-    }  // ***
-    FT maxFlow(int _src, int _dest) {
-        src = _src, dest = _dest;
-        FT result = 0, delta;
-        while (dinic_bfs()) {
-            fill(work.begin(), work.end(), 0);
-            while ((delta = dinic_dfs(src, INF)) > EPS)
-                result += delta;
+    ll maxFlow(int S, int T) {
+        ll total = 0;
+        while (BFS(S, T)) {
+            fill(pt.begin(), pt.end(), 0);
+            while (ll flow = DFS(S, T))
+                total += flow;
         }
-        return result;
+        return total;
     }
 };
 
@@ -70,7 +78,7 @@ class HopcroftKarp {
     static const int INF = 1e9;
     int U, V, nil;
     vector<int> pairU, pairV, dist;
-    vector<vector<int> > adj;
+    vector<vector<int>> adj;
     bool bfs() {
         queue<int> q;
         for (int u = 0; u < U; u++)
