@@ -44,12 +44,10 @@ class Polynomial {
     explicit Polynomial(vector<cd> coefficients) {
         order = coefficients.size();
         coeff = coefficients;
-        this->resize(order);
     }
 #else
     explicit Polynomial(vector<ll> coefficients) {
         order = coefficients.size();
-        this->resize(order);
         for (ll i = 0; i < order; i++) {
             coeff[i] = coefficients[i];
         }
@@ -60,19 +58,13 @@ class Polynomial {
         coeff = vector<cd>(copy.coeff);
     }
     void resize(int order) {
-        int size;
-        for (size = 1; size < order + 1; size *= 2)
-            ;
+        int size = 1ll << (ll)ceil(log2(order));
         coeff.resize(size);
     }
 
 #ifdef IS_FFT
     void fft(bool invert = false) {
         int n = coeff.size();
-        vector<cd> a(n);
-        for (ll i = 0; i < n; i++) {
-            a[i] = coeff[i];
-        }
 
         for (int i = 1, j = 0; i < n; i++) {
             int bit = n >> 1;
@@ -81,7 +73,7 @@ class Polynomial {
             j ^= bit;
 
             if (i < j)
-                swap(a[i], a[j]);
+                swap(this->coeff[i], this->coeff[j]);
         }
 
         for (int len = 2; len <= n; len <<= 1) {
@@ -90,24 +82,19 @@ class Polynomial {
             for (int i = 0; i < n; i += len) {
                 cd w(1);
                 for (int j = 0; j < len / 2; j++) {
-                    cd u = a[i + j], v = a[i + j + len / 2] * w;
-                    a[i + j] = u + v;
-                    a[i + j + len / 2] = u - v;
+                    cd u = this->coeff[i + j],
+                       v = this->coeff[i + j + len / 2] * w;
+                    this->coeff[i + j] = u + v;
+                    this->coeff[i + j + len / 2] = u - v;
                     w *= wlen;
                 }
             }
         }
 
         if (invert) {
-            for (cd &x : a)
+            for (cd &x : this->coeff)
                 x /= n;
         }
-
-        for (ll i = 0; i < n; i++) {
-            coeff[i] = a[i];
-            cout << coeff[i] << " ";
-        }
-        cout << endl;
     }
 #else
     void ntt(bool invert = false) {
@@ -147,6 +134,7 @@ class Polynomial {
         Polynomial x(a), y(b);
 
         int order = a.order + b.order;
+        order = 1ll << (ll)ceil(log2(order));
         x.resize(order);
         y.resize(order);
 
@@ -161,7 +149,10 @@ class Polynomial {
         Polynomial res(poly);
         res.fft(true);
 
-        res.order = order;
+        for (ll i = 0; i < order; i++) {
+            cout << res.coeff[i] << " ";
+        }
+
         return res;
     }
 

@@ -9,7 +9,7 @@ using namespace std;
 
 int main() {
     Polynomial x({1, 1});
-    Polynomial y({1, 1, 1});
+    Polynomial y({1, 1});
     Polynomial z = x * y;
 
     return 0;
