@@ -111,6 +111,31 @@ frametitleaboveskip=\dimexpr-\ht\strutbox\relax
 \label{#2}}{\end{mdframed}}
 
 
+\newcounter{prob}[section]\setcounter{prob}{0}
+\renewcommand{\theprob}{\arabic{section}.\arabic{prob}}
+\newenvironment{problem}[2][]{%
+\refstepcounter{prob}%
+\ifstrempty{#1}%
+{\mdfsetup{%
+frametitle={%
+\tikz[baseline=(current bounding box.east),outer sep=0pt]
+\node[anchor=east,rectangle,fill=red!80]
+{\strut Problem~\theprob};}}
+}%
+{\mdfsetup{%
+frametitle={%
+\tikz[baseline=(current bounding box.east),outer sep=0pt]
+\node[anchor=east,rectangle,fill=red!80]
+{\strut Problem~\theprob:~#1};}}%
+}%
+\mdfsetup{innertopmargin=10pt,linecolor=red!80,%
+linewidth=2pt,topline=true,%
+frametitleaboveskip=\dimexpr-\ht\strutbox\relax
+}
+\begin{mdframed}[]\relax%
+\label{#2}}{\end{mdframed}}
+
+
 \newcounter{exm}[section]\setcounter{exm}{0}
 \renewcommand{\theexm}{\arabic{section}.\arabic{exm}}
 \newenvironment{example}[2][]{%
@@ -186,12 +211,14 @@ frametitleaboveskip=\dimexpr-\ht\strutbox\relax
     \vfill
 \end{titlepage}
 
+\input{tex/probability.tex}
 \input{tex/stackqueueheap.tex}
 \input{tex/rangequeries.tex}
 \input{tex/dynamicprogramming.tex}
 \input{tex/gametheory.tex}
 \input{tex/mathematicaltools.tex}
 \input{tex/graphstrees.tex}
+\input{tex/flows.tex}
 \input{tex/_strategysheet.tex}
 
 \end{document}

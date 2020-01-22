@@ -2,90 +2,97 @@
 
 #define AVG_CASE
 #ifdef AVG_CASE
-struct Edge {
-    ll from, to, cap, flow, index;
-    Edge(ll dfrom, ll dto, ll dcap, ll dflow, ll dindex)
-        : from(dfrom), to(dto), cap(dcap), flow(dflow), index(dindex) {
-    }
-};
 struct PushRelabel {
-    ll N;
-    vector<vector<Edge>> G;
+    struct Edge {
+        ll from, to, cap, flow, index;
+        Edge(ll dfrom, ll dto, ll dcap, ll dflow, ll dindex)
+            : from(dfrom), to(dto), cap(dcap), flow(dflow), index(dindex) {
+        }
+    };
+
+    ll size;
+    vector<vector<Edge>> graph;
     vector<ll> excess;
     vector<ll> dist, active, count;
-    queue<ll> Q;
-    PushRelabel(ll dN)
-        : N(dN), G(N), excess(N), dist(N), active(N), count(2 * N) {
+    queue<ll> q;
+
+    PushRelabel(ll n)
+        : size(n),
+          graph(size),
+          excess(size),
+          dist(size),
+          active(size),
+          count(2 * size) {
     }
-    void addEdge(ll from, ll to, ll cap) {
-        G[from].push_back(Edge(from, to, cap, 0, G[to].size()));
+    void add_edge(ll from, ll to, ll cap) {
+        graph[from].push_back(Edge(from, to, cap, 0, graph[to].size()));
         if (from == to)
-            G[from].back().index++;
-        G[to].push_back(Edge(to, from, 0, 0, G[from].size() - 1));
+            graph[from].back().index++;
+        graph[to].push_back(Edge(to, from, 0, 0, graph[from].size() - 1));
     }
-    void Enqueue(ll v) {
+    void __enqueue(ll v) {
         if (!active[v] && excess[v] > 0) {
             active[v] = true;
-            Q.push(v);
+            q.push(v);
         }
     }
-    void Push(Edge &e) {
+    void __push(Edge &e) {
         ll amt = ll(min(excess[e.from], ll(e.cap - e.flow)));
         if (dist[e.from] <= dist[e.to] || amt == 0)
             return;
         e.flow += amt;
-        G[e.to][e.index].flow -= amt;
+        graph[e.to][e.index].flow -= amt;
         excess[e.to] += amt;
         excess[e.from] -= amt;
-        Enqueue(e.to);
+        __enqueue(e.to);
     }
-    void Gap(ll k) {
-        for (ll v = 0; v < N; v++) {
+    void __gap(ll k) {
+        for (ll v = 0; v < size; v++) {
             if (dist[v] < k)
                 continue;
             count[dist[v]]--;
-            dist[v] = max(dist[v], N + 1);
+            dist[v] = max(dist[v], size + 1);
             count[dist[v]]++;
-            Enqueue(v);
+            __enqueue(v);
         }
     }
-    void Relabel(ll v) {
+    void __relabel(ll v) {
         count[dist[v]]--;
-        dist[v] = 2 * N;
-        for (ll i = 0; i < (ll)G[v].size(); i++)
-            if (G[v][i].cap - G[v][i].flow > 0)
-                dist[v] = min(dist[v], dist[G[v][i].to] + 1);
+        dist[v] = 2 * size;
+        for (ll i = 0; i < (ll)graph[v].size(); i++)
+            if (graph[v][i].cap - graph[v][i].flow > 0)
+                dist[v] = min(dist[v], dist[graph[v][i].to] + 1);
         count[dist[v]]++;
-        Enqueue(v);
+        __enqueue(v);
     }
-    void Discharge(ll v) {
-        for (ll i = 0; excess[v] > 0 && i < (ll)G[v].size(); i++)
-            Push(G[v][i]);
+    void __discharge(ll v) {
+        for (ll i = 0; excess[v] > 0 && i < (ll)graph[v].size(); i++)
+            __push(graph[v][i]);
         if (excess[v] > 0) {
             if (count[dist[v]] == 1)
-                Gap(dist[v]);
+                __gap(dist[v]);
             else
-                Relabel(v);
+                __relabel(v);
         }
     }
-    ll maxFlow(ll s, ll t) {
-        count[0] = N - 1;
-        count[N] = 1;
-        dist[s] = N;
+    ll max_flow(ll s, ll t) {
+        count[0] = size - 1;
+        count[size] = 1;
+        dist[s] = size;
         active[s] = active[t] = true;
-        for (ll i = 0; i < (ll)G[s].size(); i++) {
-            excess[s] += G[s][i].cap;
-            Push(G[s][i]);
+        for (ll i = 0; i < (ll)graph[s].size(); i++) {
+            excess[s] += graph[s][i].cap;
+            __push(graph[s][i]);
         }
-        while (!Q.empty()) {
-            ll v = Q.front();
-            Q.pop();
+        while (!q.empty()) {
+            ll v = q.front();
+            q.pop();
             active[v] = false;
-            Discharge(v);
+            __discharge(v);
         }
         ll totflow = 0;
-        for (ll i = 0; i < (ll)G[s].size(); i++)
-            totflow += G[s][i].flow;
+        for (ll i = 0; i < (ll)graph[s].size(); i++)
+            totflow += graph[s][i].flow;
         return totflow;
     }
 };
@@ -163,16 +170,17 @@ struct Dinic {
     }
 };
 #endif
-class HopcroftKarp {
-   public:
+
+struct HopcroftKarp {
     static const int INF = 1e9;
-    int U, V, nil;
-    vector<int> pairU, pairV, dist;
-    vector<vector<int>> adj;
-    bool bfs() {
+    int size_u, size_v, nil;
+    vector<int> pair_u, pair_v, dist;
+    vector<vector<int>> adjacency;
+
+    bool __bfs() {
         queue<int> q;
-        for (int u = 0; u < U; u++)
-            if (pairU[u] == nil)
+        for (int u = 0; u < size_u; u++)
+            if (pair_u[u] == nil)
                 dist[u] = 0, q.push(u);
             else
                 dist[u] = INF;
@@ -182,19 +190,19 @@ class HopcroftKarp {
             q.pop();
             if (dist[u] >= dist[nil])
                 continue;
-            for (int v : adj[u])
-                if (dist[pairV[v]] == INF)
-                    dist[pairV[v]] = dist[u] + 1, q.push(pairV[v]);
+            for (int v : adjacency[u])
+                if (dist[pair_v[v]] == INF)
+                    dist[pair_v[v]] = dist[u] + 1, q.push(pair_v[v]);
         }
         return dist[nil] != INF;
     }
-    bool dfs(int u) {
+    bool __dfs(int u) {
         if (u == nil)
             return true;
-        for (int v : adj[u])
-            if (dist[pairV[v]] == dist[u] + 1)
-                if (dfs(pairV[v])) {
-                    pairV[v] = u, pairU[u] = v;
+        for (int v : adjacency[u])
+            if (dist[pair_v[v]] == dist[u] + 1)
+                if (__dfs(pair_v[v])) {
+                    pair_v[v] = u, pair_u[u] = v;
                     return true;
                 }
         dist[u] = INF;
@@ -202,23 +210,23 @@ class HopcroftKarp {
     }
 
    public:
-    HopcroftKarp(int U_, int V_) {
-        nil = U = V = max(U_, V_);
-        adj.resize(U + 1);
-        dist.resize(U + 1);
-        pairU.resize(U + 1);
-        pairV.resize(V);
+    HopcroftKarp(int u_size, int v_size) {
+        nil = size_u = size_v = max(u_size, v_size);
+        adjacency.resize(size_u + 1);
+        dist.resize(size_u + 1);
+        pair_u.resize(size_u + 1);
+        pair_v.resize(size_v);
     }
-    void addEdge(int u, int v) {
-        adj[u].push_back(v);
+    void add_edge(int u, int v) {
+        adjacency[u].push_back(v);
     }
-    int maxMatch() {
-        fill(pairU.begin(), pairU.end(), nil);
-        fill(pairV.begin(), pairV.end(), nil);
+    int max_match() {
+        fill(pair_u.begin(), pair_u.end(), nil);
+        fill(pair_v.begin(), pair_v.end(), nil);
         int res = 0;
-        while (bfs())
-            for (int u = 0; u < U; u++)
-                if (pairU[u] == nil && dfs(u))
+        while (__bfs())
+            for (int u = 0; u < size_u; u++)
+                if (pair_u[u] == nil && __dfs(u))
                     res++;
         return res;
     }

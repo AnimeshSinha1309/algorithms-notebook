@@ -1,0 +1,23 @@
+\chapter{Flow Algorithms}
+
+
+
+\section{Some interesting types of Flows}
+
+\subsection{Circulation Flows}
+
+When there is no source, but we need to find if there exists a valid cyclic flow in a graph with directed edges with minimum and maximum capacities. The flow through each pipe has to be more than minimum and less than maximum.
+
+
+
+\section{Chains in Posets}
+
+A Poset (Partially Ordered Set) is a set where $<$, $=$, $>$ are defined between some pair of elements but not over others. A subset where comparators are defined between every pair is called a chain, where none is defined is called an anti-chain.
+
+\begin{theorem}[Dilworth's Theorem]{}
+    The maximum length of any anti-chain in a poset equals the number of chains in it's minimal chain cover.
+\end{theorem}
+
+\begin{theorem}[Koenig's Theorem]{}
+    The minimum set cover of a bipartite graph equals the maximum flow from one set to the other.
+\end{theorem}

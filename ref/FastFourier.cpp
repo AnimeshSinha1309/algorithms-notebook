@@ -1,27 +1,25 @@
 #include "template.hpp"
-const double PI = acos(-1);
 
-#ifdef IS_FFT
-    using cd = complex<double>;
-#else
-    using cd = int;
-#endif
-// use llround(a[i].real()) when printing FFT output
+template <typename Type>
 struct Polynomial {
+    // use llround(a[i].real()) when printing FFT output
+    const double PI = acos(-1);
     static const int root = 565042129;
     static const int root_1 = 950391366;
     static const int root_pw = 1 << 20;
     static const int mod = 998244353;
 
-    static int __mod_pow(int a, int n) {
+    static int pow(ll a, int n) {
         int res = 1;
         for (a %= mod; n > 0; n >>= 1) {
-            if (n & 1) res = (int)((1LL * res * a) % mod);
+            if (n & 1)
+                res = (int)((1LL * res * a) % mod);
             a = (int)((a * 1ll * a) % mod);
-        } return res;
+        }
+        return res;
     }
     int order;
-    vector<cd> coeff;
+    vector<Type> coeff;
     explicit Polynomial() : order(0), coeff(vector<cd>(0)) {
     }
     explicit Polynomial(vector<cd> coefficients)
@@ -35,32 +33,37 @@ struct Polynomial {
         coeff.resize(size, 0);
     }
 
-#ifdef IS_FFT
-    void fft(bool invert = false) {
+    static void fft(vector<complex<double>> &coeff, bool invert = false) {
         int n = (int)coeff.size();
         for (int i = 1, j = 0; i < n; i++) {
             int bit = n >> 1;
-            for (; j & bit; bit >>= 1) j ^= bit;
+            for (; j & bit; bit >>= 1)
+                j ^= bit;
             j ^= bit;
-            if (i < j) swap(coeff[i], coeff[j]);
+            if (i < j)
+                swap(coeff[i], coeff[j]);
         }
         for (int len = 2; len <= n; len <<= 1) {
             double ang = 2 * PI / len * (invert ? -1 : 1);
-            cd wlen(cos(ang), sin(ang));
+            complex<double> wlen(cos(ang), sin(ang));
             for (int i = 0; i < n; i += len) {
-                cd w(1);
+                complex<double> w(1);
                 for (int j = 0; j < len / 2; j++) {
-                    cd u = coeff[i + j], v = coeff[i + j + len / 2] * w;
+                    complex<double> u = coeff[i + j],
+                                    v = coeff[i + j + len / 2] * w;
                     coeff[i + j] = u + v;
                     coeff[i + j + len / 2] = u - v;
                     w *= wlen;
                 }
             }
         }
-        if (invert) { for (cd &x : coeff) x /= n; }
+        if (invert) {
+            for (cd &x : coeff)
+                x /= n;
+        }
     }
-#else
-    void fft(bool invert = false) {
+
+    static void fft(vector<long long> &coeff, bool invert = false) {
         int n = (int)coeff.size();
         for (int i = 1, j = 0; i < n; i++) {
             int bit = n >> 1;
@@ -86,46 +89,38 @@ struct Polynomial {
             }
         }
         if (invert) {
-            int n_1 = __mod_pow(n, mod - 2);
+            int n_1 = pow(n, mod - 2);
             for (auto &x : coeff)
                 x = (int)(1LL * x * n_1 % mod);
         }
     }
-#endif
-    friend Polynomial operator*(const Polynomial &a, const Polynomial &b) {
-        Polynomial x(a), y(b);
+
+    friend Polynomial operator*(const Polynomial<Type> &a,
+                                const Polynomial<Type> &b) {
+        decltype(a) x(a);
+        decltype(b) y(b);
         int order = a.order + b.order;
         order = 1 << (ll)ceil(log2(order));
         x.resize(order), y.resize(order);
-        x.fft(), y.fft();
-
-        for (int i = 0; i < order; i++) {
-#ifdef IS_FFT
-            x.coeff[i] = (x.coeff[i] * y.coeff[i]);
-#else
-            x.coeff[i] = (int)((1ll * x.coeff[i] * y.coeff[i]) % mod);
-#endif
-        }
-        x.fft(true);
-        return x;
+        fft(x), fft(y);
+        decltype(x.coeff) res(order);
+        for (int i = 0; i < order; i++)
+            res[i] = (x.coeff[i] * y.coeff[i]);
+        fft(res, true);
+        return Polynomial(x);
     }
 
     friend Polynomial operator^(const Polynomial &a, int power) {
-        Polynomial x(a);
+        decltype(a) x(a);
         int order = a.order * power;
         x.resize(order);
         x.fft();
         int size = (int)x.coeff.size();
-        vector<cd> poly(size);
+        decltype() poly(size);
         Polynomial res(poly);
-#ifdef IS_FFT
         for (int i = 0; i < size; i++)
             poly[i] = pow(x.coeff[i], power);
-#else
-        for (int i = 0; i < size; i++)
-            poly[i] = __mod_pow(x.coeff[i], power);
-#endif
-        res.fft(true);
+        fft(res, true);
         res.order = order;
         return res;
     }
