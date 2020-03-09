@@ -1732,5 +1732,31 @@
             "freopen(\"$1.out\", \"w\", stdout);"
         ],
         "description": "Redirect all input/output to and from files"
+    },
+    "Closest Pair of Points - Geometry": {
+        "prefix": "$al-closestpair",
+        "body": [
+            "double closest_pair(const vpl &pt, int n) {",
+            "    double best = FLT_MAX;",
+            "    set<pll> box;",
+            "    box.insert(pt[0]);",
+            "    int left = 0;",
+            "    for (int i = 1; i < n; ++i) {",
+            "        while (left < i && pt[i].second - pt[left].second > sqrt(best))",
+            "            box.erase(pt[left++]);",
+            "        ll cnt = 0;",
+            "        for (auto it = box.lower_bound(",
+            "                 {pt[i].first - sqrt(best), pt[i].second - sqrt(best)});",
+            "             it != box.end() && pt[i].first + sqrt(best) >= it->first; it++) {",
+            "            cnt++;",
+            "            best = min(best, (pow(pt[i].first - it->first, 2.0) +",
+            "                              pow(pt[i].second - it->second, 2.0)));",
+            "        }",
+            "        box.insert(pt[i]);",
+            "    }",
+            "    return best;",
+            "}"
+        ],
+        "description": "Find the Closest pair of points on a 2-D plane using Sweep Line"
     }
 }
