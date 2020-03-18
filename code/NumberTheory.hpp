@@ -1,12 +1,7 @@
 #ifndef CODE_NUMBERTHEORY_H
 #define CODE_NUMBERTHEORY_H
 
-#include <algorithm>
-#include <cmath>
-#include <iostream>
-#include <numeric>
-#include <vector>
-using namespace std;
+#include "../ref/template.hpp"
 
 /**
  * Modular Arithmetic functions

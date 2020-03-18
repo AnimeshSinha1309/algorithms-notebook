@@ -1,19 +1,7 @@
 #ifndef CODE_GRAPH_H
 #define CODE_GRAPH_H
 
-#include <iostream>
-#include <numeric>
-#include <queue>
-#include <stack>
-#include <vector>
-using namespace std;
-
-typedef long long ll;
-typedef vector<long long> vll;
-typedef pair<long long, long long> pll;
-typedef vector<pair<long long, long long>> vpl;
-typedef vector<vector<long long>> mll;
-typedef vector<bool> vbl;
+#include "../ref/template.hpp"
 
 class Graph {
    public:
