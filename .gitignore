@@ -6,6 +6,7 @@ code/.idea/
 ques/.idea/
 code/cmake-build-debug/
 ques/cmake-build-debug/
+.idea
 
 # The LaTeX output files
 notebook.aux
@@ -13,3 +14,6 @@ notebook.fls
 notebook.log
 notebook.synctex.gz
 notebook.fdb_latexmk
+
+# online judge tool files
+cache/*
