@@ -9,8 +9,8 @@ ulimit -s unlimited  # make the stack size unlimited
 # list files to test
 for file in $(find . -name \*.test.cpp) ; do
     # get the URL for verification
-    url="$(sed -e 's/^# *define \+PROBLEM \+\(https\?:\/\/.*\)/\1/ ; t ; d' "$file")"
-    # echo "Testing $file obtained url $url"
+    url="$(sed -e 's/^# *define \+TURL \"\+\(https\?:\/\/.*\)\"/\1/ ; t ; d' "$file")"
+    echo "Testing $file obtained url $url"
 
     if [[ -z ${url} ]] ; then
         continue
