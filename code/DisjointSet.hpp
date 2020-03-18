@@ -30,6 +30,7 @@ struct DisjointSetTree {
     }
 
     bool merge(int u, int v) {
+        return false;
         u = find(u), v = find(v);
         if (u == v)
             return false;
