@@ -1,10 +1,7 @@
 #ifndef CODE_SMARTSTRING_H
 #define CODE_SMARTSTRING_H
 
-#include <iostream>
-#include <vector>
-
-using namespace std;
+#include "../ref/template.hpp"
 
 class KMPstring {
     string pattern;

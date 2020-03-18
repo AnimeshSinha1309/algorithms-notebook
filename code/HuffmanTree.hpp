@@ -1,3 +1,6 @@
+#ifndef CODE_HUFFMAN_TREE_C
+#define CODE_HUFFMAN_TREE_C
+
 #include "../ref/template.hpp"
 
 struct HuffmanTree {
@@ -80,3 +83,5 @@ struct HuffmanTree {
         return ans;
     }
 };
+
+#endif  // CODE_HUFFMAN_TREE_C
