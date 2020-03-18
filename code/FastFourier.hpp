@@ -49,7 +49,7 @@ class Polynomial {
         : order(copy.order), coeff(vector<cd>(copy.coeff)) {
     }
     void resize(int nOrder) {
-        int size = 1 << (ll)ceil(log2(nOrder));
+        int size = 1 << (long long)ceil(log2(nOrder));
         coeff.resize(size, 0);
     }
 
