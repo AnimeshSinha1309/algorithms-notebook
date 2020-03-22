@@ -31,28 +31,30 @@ class Graph {
             list[i].index = i;
         this->n = n;
     }
-    void add_edge(int u, int v, long long w = 1) {
+    void add_edge(int u, int v, long long w = 1, bool bidirectional = true) {
         list[u].adjacent.emplace_back(v, w);
-        list[v].adjacent.emplace_back(u, w);
+        if (bidirectional)
+            list[v].adjacent.emplace_back(u, w);
     }
 
     pair<vll, vll> dijkstra(vll from) {
         vll dist(n, INT64_MAX), parent(n, INT32_MAX);
         priority_queue<pll, vpl, greater<>> q;
+        // q: (distance, node id); edge: (to, weight)
         for (auto index : from) {
             dist[index] = 0;
-            q.emplace(index, 0);
+            q.emplace(0, index);
         }
         while (!q.empty()) {
             pll top = q.top();
             q.pop();
-            if (top.second > dist[top.first])
+            if (top.first > dist[top.second])
                 continue;
-            for (auto edge : list[top.first].adjacent) {
-                if (top.second + edge.second < dist[edge.first]) {
-                    dist[edge.first] = top.second + edge.second;
-                    parent[edge.first] = top.first - 1;
-                    q.emplace(edge.first, top.second + edge.second);
+            for (auto edge : list[top.second].adjacent) {
+                if (top.first + edge.second < dist[edge.first]) {
+                    dist[edge.first] = top.first + edge.second;
+                    parent[edge.first] = top.second - 1;
+                    q.emplace(top.first + edge.second, edge.first);
                 }
             }
         }

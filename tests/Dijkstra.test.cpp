@@ -13,7 +13,7 @@ int main() {
     for (int i = 0; i < m; i++) {
         ll u, v, w;
         cin >> u >> v >> w;
-        g.add_edge(u, v, w);
+        g.add_edge(u, v, w, false);
     }
     // Get the result from a call to Dijkstra
     pair<vll, vll> res = g.dijkstra({s});
