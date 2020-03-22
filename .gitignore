@@ -17,3 +17,8 @@ notebook.fdb_latexmk
 
 # online judge tool files
 cache/*
+
+# Compiled C++ Binaries
+*.test
+*.out
+*.o
