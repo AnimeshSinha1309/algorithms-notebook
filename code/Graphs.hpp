@@ -118,10 +118,8 @@ class Graph {
     pair<vll, vll> bellman_ford(vll from) {
         vll distances(n, INT64_MAX);
         vll parent(n, INT32_MAX);
-
         for (ll &i : from)
             distances[i] = 0;
-
         // relax all |E| edges, |V| - 1 times
         for (int i = 0; i < n - 1; i++) {
             for (int source = 0; source <= n - 1; source++) {
@@ -136,14 +134,14 @@ class Graph {
                 }
             }
         }
-
         // Checking for negative cycles and putting -1 if it exists.
         for (ll source = 0; source <= n - 1; source++) {
             for (const auto &edge : list[source].adjacent) {
                 ll sink = edge.first;
-                if (distances[source] + edge.second < distances[sink]) {
+                if (distances[source] < INT64_MAX &&
+                    distances[source] + edge.second < distances[sink]) {
                     for (ll i : from)
-                        distances[i] = -1;
+                        distances[i] = INT64_MIN;
                     return {distances, parent};
                 }
             }
@@ -151,8 +149,8 @@ class Graph {
         return {distances, parent};
     }
 
-    vector<vector<long long>> floyd_warshall() {
-        vector<vector<long long>> distances(n, vector<long long>(n, INT64_MAX));
+    mll floyd_warshall() {
+        mll distances(n, vll(n, INT64_MAX));
         for (int i = 0; i < n; i++)
             distances[i][i] = 0;
         for (int i = 0; i < n; i++)
