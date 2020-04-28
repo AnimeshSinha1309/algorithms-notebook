@@ -1,12 +1,7 @@
 #ifndef CODE_BINARY_HEAP_H
 #define CODE_BINARY_HEAP_H
 
-#include <cstdint>
-#include <functional>
-#include <iostream>
-#include <vector>
-
-using namespace std;
+#include "../ref/template.hpp"
 
 template <class Type>
 class BinaryHeap {

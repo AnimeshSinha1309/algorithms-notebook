@@ -1,18 +1,7 @@
 #ifndef CODE_TREE_H
 #define CODE_TREE_H
 
-#include <cmath>
-#include <iostream>
-#include <queue>
-#include <vector>
-using namespace std;
-
-typedef long long ll;
-typedef vector<long long> vll;
-typedef pair<long long, long long> pll;
-typedef vector<pair<long long, long long>> vpl;
-typedef vector<vector<long long>> mll;
-typedef vector<bool> vbl;
+#include "../ref/template.hpp"
 
 class Tree {
    public:
@@ -95,7 +84,45 @@ class Tree {
     }
 };
 
-class WeightedTree : public Tree {};
+ll diameter(Tree tree) {
+    ll n = tree.list.size() + 1;
+    vbl visited(n + 1, false);
+    vll distances(n + 1, -1);
+    queue<pll> q;
+    q.push({tree.root->index, 0});
+    ll node_max = tree.root->index, distance_max = 0;
+    while (!q.empty()) {
+        auto node = q.front();
+        q.pop();
+        if (node.second < distance_max) {
+            distance_max = node.second;
+            node_max = node.first;
+        }
+
+        for (auto neighbor : tree.list[node.first].adjacent) {
+            if (!visited[neighbor->index]) {
+                auto d = node.second + 1;
+                q.push({neighbor->index, d});
+                visited[neighbor->index] = 1;
+            }
+        }
+    }
+    visited = vbl(n + 1, false);
+    q.push({node_max, 0});
+    distance_max = 0;
+    while (!q.empty()) {
+        auto node = q.front();
+        q.pop();
+        maximize(distance_max, node.second);
+        for (auto neighbor : tree.list[node.first].adjacent) {
+            if (!visited[neighbor->index]) {
+                auto d = node.second + 1;
+                q.push({neighbor->index, d});
+                visited[neighbor->index] = 1;
+            }
+        }
+    }
+}
 
 class CentroidTree : public Tree {
    private:

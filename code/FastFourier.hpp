@@ -1,11 +1,7 @@
 #ifndef CODE_FASTFOURIER_H
 #define CODE_FASTFOURIER_H
 
-#include <cmath>
-#include <complex>
-#include <iostream>
-#include <vector>
-using namespace std;
+#include "../ref/template.hpp"
 
 // use llround(a[i].real()) when printing FFT output
 
@@ -143,9 +139,7 @@ class Polynomial {
             x.coeff[i] = (int)((1ll * x.coeff[i] * y.coeff[i]) % mod);
 #endif
         }
-
         x.fft(true);
-
         return x;
     }
 
@@ -172,10 +166,13 @@ class Polynomial {
     }
 };
 
-// Code for finding closest match by Hamming distance of r in s |r| <= |s|
-// we reverse polynomial r and multiply with s
-// for (ll i = (int)r.size() - 1 - 1; i < s.size(); i++) {
-//     res[i] += z.coeff[i]; // z is the multiplication result
-// }
-// answers contained in res[sz(r) - 1] to res[sz(s) - 1]
+/**
+ * Code for finding closest match by Hamming distance of r in s |r| <= |s|
+ * we reverse polynomial r and multiply with s
+ * for (ll i = (int)r.size() - 1 - 1; i < s.size(); i++) {
+ *     res[i] += z.coeff[i]; // z is the multiplication result
+ * }
+ * answers contained in res[sz(r) - 1] to res[sz(s) - 1]
+ */
+
 #endif  // CODE_FASTFOURIER_H

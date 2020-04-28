@@ -1,12 +1,7 @@
 #ifndef CODE_SEGTREE_H
 #define CODE_SEGTREE_H
 
-#include <cmath>
-#include <functional>
-#include <iostream>
-#include <vector>
-
-using namespace std;
+#include "../ref/template.hpp"
 
 template <class Type>
 class SegmentTree {
