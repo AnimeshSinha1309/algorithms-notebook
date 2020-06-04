@@ -14,7 +14,7 @@
 \begin{theorem}{Take Away}
   Let $H_i$ denote all the losing states, and $f(x)$ denote the number of stones that can be removed in the next move after x stones in the previous. Then we can find the losing states as follows.
   \begin{equation}
-    H_{k+1} = H_k + H_m, \;\;\;\;\; where \;\; m = min \{j: f(H_j) \geq H_k\}    
+    H_{k+1} = H_k + H_m, \;\;\;\;\; where \;\; m = min \{j: f(H_j) \geq H_k\}
   \end{equation}
 \end{theorem}
 The idea is that we can remove any $H_j + H_k$ stones, we can think of them as two separate piles. We cannot win on either pile, so the only way to win is when the $H_j$ pile ends, the last move was enough that $f(last\:move) \geq H_k$ so that we can win next move. If this is not possible, then the state is losing.
@@ -40,14 +40,14 @@ We find that we can express any number as a sum of the values of $H_1$, $H_2$, .
 \subsubsection{The greedy strategy}
 
 Given any starting state that is not losing, we can write out it's representation in the H-Binary system.
-Since this will have more than 1 ones in it's representation, \colorbox{yellow}{we subtract the LEAST SIGNIFICANT BIT}. 
+Since this will have more than 1 ones in it's representation, \colorbox{yellow}{we subtract the LEAST SIGNIFICANT BIT}.
 
-Now, the opponent cannot remove the next one in the representation, because of the property of number systems that $H_j > f(H_i) \;\; \forall j > i$, due to the way we found losing states $H_i$. Finally, when our oppnent removes any value from the form $.....1000000$ (Any value, last set bit 1, and 0s), he will get a 1 in the resulting representation $.....0000110$. 
+Now, the opponent cannot remove the next one in the representation, because of the property of number systems that $H_j > f(H_i) \;\; \forall j > i$, due to the way we found losing states $H_i$. Finally, when our oppnent removes any value from the form $.....1000000$ (Any value, last set bit 1, and 0s), he will get a 1 in the resulting representation $.....0000110$.
 
 Now in our move we shall remove the lowest set bit again. This is possible, as the last move must have been greater than or equal to $H_j$ if j is lowest set bit. (Obviously, because when we add back we need to have 1+1 = 0 to get all the numbers back to 0 and 1 at the position that could not be removed). So $f(H_j) >= H_j$, this move is possible, and we can win.
 
 \subsection{Proof of Victory}
-On our moves, we reduce the number of ones in the representation by 1. Our opponent, if he removes the one at $H_j$, he has to insert a 1 and position smaller than j. So he increases or keeps constant the number of ones. Obviously, the last move will be played by us, reducing the number of ones to 0 and finishing the game. 
+On our moves, we reduce the number of ones in the representation by 1. Our opponent, if he removes the one at $H_j$, he has to insert a 1 and position smaller than j. So he increases or keeps constant the number of ones. Obviously, the last move will be played by us, reducing the number of ones to 0 and finishing the game.
 
 
 \subsection{References}
@@ -64,7 +64,7 @@ Contains most of the theory mentioned above: \url{http://www.cut-the-knot.org/Cu
 
 \textbf{Mark out a state and all it's children. Either try MINIMAX TREE, and if the state space is large, try to find invarients, specially MODULO or PARITY.}
 
-\begin{example}{}
+\begin{example}[Invarients in Games - 1]{exm:invarients-stick-game-1}
   \textbf{Question: Start with \{(4 sticks, length 4), (1 stick, length 1)\}. In a move, we can break a stick or remove k sticks of length k. Last move wins. Find the winning states \& strategy.}
   Any state be (n1, n2, n3, n4). All states with (n1 + n3) \% 2 == (n2 + n4) \% 3 are winning positions, all others are losing. We can prove than any winning position goes to losing position and vice-versa.
 \end{example}

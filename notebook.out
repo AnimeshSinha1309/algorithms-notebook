@@ -41,21 +41,20 @@
 \BOOKMARK [2][-]{subsection.6.2.1}{Burnside's Lemma}{section.6.2}% 41
 \BOOKMARK [1][-]{section.6.3}{Number Theory}{chapter.6}% 42
 \BOOKMARK [2][-]{subsection.6.3.1}{Stern-Brocot Tree}{section.6.3}% 43
-\BOOKMARK [2][-]{subsection.6.3.2}{GCD and Divisors}{section.6.3}% 44
-\BOOKMARK [1][-]{section.6.4}{Geometry}{chapter.6}% 45
-\BOOKMARK [2][-]{subsection.6.4.1}{Graham Scan for Convex Hull}{section.6.4}% 46
-\BOOKMARK [0][-]{chapter.7}{Graphs and Tree}{}% 47
-\BOOKMARK [1][-]{section.7.1}{Trees}{chapter.7}% 48
-\BOOKMARK [2][-]{subsection.7.1.1}{Heavy Light Decomposition}{section.7.1}% 49
-\BOOKMARK [1][-]{section.7.2}{Basic Algorithms on Graphs}{chapter.7}% 50
-\BOOKMARK [2][-]{subsection.7.2.1}{List of algorithms}{section.7.2}% 51
-\BOOKMARK [2][-]{subsection.7.2.2}{Code}{section.7.2}% 52
-\BOOKMARK [0][-]{chapter.8}{Flow Algorithms}{}% 53
-\BOOKMARK [1][-]{section.8.1}{Some interesting types of Flows}{chapter.8}% 54
-\BOOKMARK [2][-]{subsection.8.1.1}{Circulation Flows}{section.8.1}% 55
-\BOOKMARK [1][-]{section.8.2}{Chains in Posets}{chapter.8}% 56
-\BOOKMARK [0][-]{chapter.9}{Problem Solving Strategies}{}% 57
-\BOOKMARK [1][-]{section.9.1}{General Advice and Basic Patters}{chapter.9}% 58
-\BOOKMARK [1][-]{section.9.2}{Standard Problems for Practice}{chapter.9}% 59
-\BOOKMARK [2][-]{subsection.9.2.1}{Math and Geometry}{section.9.2}% 60
-\BOOKMARK [1][-]{section.9.3}{Trees and Graphs}{chapter.9}% 61
+\BOOKMARK [2][-]{subsection.6.3.2}{Chinese Remainder Theorem}{section.6.3}% 44
+\BOOKMARK [2][-]{subsection.6.3.3}{Mobius Inversions}{section.6.3}% 45
+\BOOKMARK [0][-]{chapter.7}{Graphs and Tree}{}% 46
+\BOOKMARK [1][-]{section.7.1}{Trees}{chapter.7}% 47
+\BOOKMARK [2][-]{subsection.7.1.1}{Heavy Light Decomposition}{section.7.1}% 48
+\BOOKMARK [1][-]{section.7.2}{Basic Algorithms on Graphs}{chapter.7}% 49
+\BOOKMARK [2][-]{subsection.7.2.1}{List of algorithms}{section.7.2}% 50
+\BOOKMARK [2][-]{subsection.7.2.2}{Code}{section.7.2}% 51
+\BOOKMARK [0][-]{chapter.8}{Flow Algorithms}{}% 52
+\BOOKMARK [1][-]{section.8.1}{Some interesting types of Flows}{chapter.8}% 53
+\BOOKMARK [2][-]{subsection.8.1.1}{Circulation Flows}{section.8.1}% 54
+\BOOKMARK [1][-]{section.8.2}{Chains in Posets}{chapter.8}% 55
+\BOOKMARK [0][-]{chapter.9}{Problem Solving Strategies}{}% 56
+\BOOKMARK [1][-]{section.9.1}{General Advice and Basic Patters}{chapter.9}% 57
+\BOOKMARK [1][-]{section.9.2}{Standard Problems for Practice}{chapter.9}% 58
+\BOOKMARK [2][-]{subsection.9.2.1}{Math and Geometry}{section.9.2}% 59
+\BOOKMARK [1][-]{section.9.3}{Trees and Graphs}{chapter.9}% 60

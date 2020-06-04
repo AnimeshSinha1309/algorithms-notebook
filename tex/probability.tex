@@ -24,16 +24,16 @@ Interconverting sums using indicator variables is often a hard and algebraically
 
 \subsection{Codeforces 100371-H: Granite of Science}
 
-\begin{problem}[Granite of Science]{}
-    There are $n$ subjects, each having $n_i$ lessons. Let the lessons be indexed by $j$. We are looking at the first $m$ days of the semester. Any subject can start on any of the m days (even if all it's lesson's don't fit till the end), and each lesson will follow consecutively and contigously. Given that $h_{i,j}$ is the fatigue due to i-th subject's j-th lesson, and effective fatigue in one day is the sum of squares of fatigues due to all lessons that day. Total Fatigue is sum of effective fatigue in each of m days. Compute expected total fatigue.
-    
-    \colorbox{green}{Tags}: 2D Prefix Sum , Linearity of Expectation, Independent Events.
+\begin{problem}[Granite of Science]{prob:CF100371H}
+There are $n$ subjects, each having $n_i$ lessons. Let the lessons be indexed by $j$. We are looking at the first $m$ days of the semester. Any subject can start on any of the m days (even if all it's lesson's don't fit till the end), and each lesson will follow consecutively and contigously. Given that $h_{i,j}$ is the fatigue due to i-th subject's j-th lesson, and effective fatigue in one day is the sum of squares of fatigues due to all lessons that day. Total Fatigue is sum of effective fatigue in each of m days. Compute expected total fatigue.
+
+\colorbox{green}{Tags}: 2D Prefix Sum , Linearity of Expectation, Independent Events.
 \end{problem}
 
 Following is one solution to this problem (simplest and cleanest). Another one using Indicator Variables also exists, but seems to overcomplicate a relatively simple question.
 
 
-Notation: $n$ is number of subjects. $f_{\text{day}}$ is the sum of difficulties of all subjects on that day. $f_{\text{day}} = \sum_{i=1}^{i}d_i,j$, where $d_i$ is difficulty of i-th subject for that particular day and j-th lesson. 
+Notation: $n$ is number of subjects. $f_{\text{day}}$ is the sum of difficulties of all subjects on that day. $f_{\text{day}} = \sum_{i=1}^{i}d_i,j$, where $d_i$ is difficulty of i-th subject for that particular day and j-th lesson.
 
 \begin{eqnarray*}
     \text{ans} &=& \sum_{\text{day}=1}^{n} f_{\text{day}}^2 \\
@@ -45,7 +45,7 @@ Now, $f_{\text{day}}^2 = (c_1+c_2+\ldots+c_n)^2=(\sum_{i}c_i^2 + 2\sum_{i,j; i\n
 
 \begin{eqnarray*}
     E\left[f_{\text{day}}^2\right]&=&\sum_{i}E[c_i^2] + 2\sum_{i,j; i\ne j}E[c_ic_j] \\
-    &=& \sum_{i}E[c_i^2] + 2\sum_{i,j; i\ne j}E[c_i]E[c_j] 
+    &=& \sum_{i}E[c_i^2] + 2\sum_{i,j; i\ne j}E[c_i]E[c_j]
 \end{eqnarray*}
 
 Because $i$-th and $j$-th subject's contribution on the same day are independent of each other, their expectations can be split. The final expression can be simplified using the following:

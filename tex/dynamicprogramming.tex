@@ -7,12 +7,12 @@ The focus of this chapter would be to enlist all the optimizations to a DP possi
 \section{Matrix Exponentiation}
 
 
-\begin{example}{}
-\textbf{Number of ways to construct an array starting in X, and ending in Y, with no two adjacent elements are the same.}
-\begin{equation*}
-    dp[i] = \begin{bmatrix} dp[i][\text{CLASH}] \\ dp[i][\text{CLEAN}] \end{bmatrix}
-    = \begin{bmatrix} 0 & 1 \\ k-1 & k-2 \end{bmatrix} \times dp[i-1]
-\end{equation*}
+\begin{example}[DP by Matrix Exponentiation]{exm-dp-matrix-expo-1}
+    \textbf{Number of ways to construct an array starting in X, and ending in Y, with no two adjacent elements are the same.}
+    \begin{equation*}
+        dp[i] = \begin{bmatrix} dp[i][\text{CLASH}] \\ dp[i][\text{CLEAN}] \end{bmatrix}
+        = \begin{bmatrix} 0 & 1 \\ k-1 & k-2 \end{bmatrix} \times dp[i-1]
+    \end{equation*}
 \end{example}
 
 
@@ -31,9 +31,5 @@ We can take each mask to start off, and then go down a series of all it's subset
 
 Time complexity is the following:
 \begin{equation}
-    T(n) = \sum_{k=0}^{n-1} C^n_k 2^k = 3^k 
+    T(n) = \sum_{k=0}^{n-1} C^n_k 2^k = 3^k
 \end{equation}
-
-\begin{example}
-    Find the number of ways in the given array of $10^6$ numbers
-\end{example}
