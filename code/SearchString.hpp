@@ -50,7 +50,7 @@ class SuffixArray {
 
     SuffixArray(string st) {
         n = st.size();
-        __log_n = log2(n) + 1;
+        __log_n = log2(n) + 2;
         ra = vector<vector<int>>(__log_n, vector<int>(n));
         sa = vector<int>(n);
 
