@@ -39,117 +39,147 @@ class KMPstring {
     }
 };
 
-class SuffixArray {
-   public:
+struct SuffixArray {
+// { { left subarray class, right subarray class }, start idx in original string }
+typedef pair<PII, int> data;
+#define alphabet 256
+
     string s;
-    int n, __log_n;
-    vector<int> sa;            // Suffix Array
-    vector<vector<int>> ra;    // Rank Array
-    vector<vector<int>> _lcp;  // Longest Common Prefix
-    vector<int> __msb, __dollar;
+    int n;
+    VI classes;
+    vector<data> idx;
+    VI lcp;
+    VVI sparselcp;
 
-    SuffixArray(string st) {
-        n = st.size();
-        __log_n = log2(n) + 2;
-        ra = vector<vector<int>>(__log_n, vector<int>(n));
-        sa = vector<int>(n);
-
-        __msb = vector<int>(n);
-        int mx = -1;
-        for (int i = 0; i < n; i++) {
-            if (i >= (1 << (mx + 1)))
-                mx++;
-            __msb[i] = mx;
-        }
-        this->s = st;
+    SuffixArray(const string &str) {
+        s = str + " ";
+        n = s.size();
         build_SA();
     }
 
-    void __counting_sort(int l, int k) {
-        int maxi = max(300, n);
-        vector<int> count(maxi, 0), temp_sa(n, 0);
-        for (int i = 0; i < n; i++) {
-            int idx = (i + k < n ? ra[l][i + k] : 0);
-            count[idx]++;
-        }
-        for (int i = 0, sum = 0; i < maxi; i++) {
-            int t = count[i];
-            count[i] = sum;
-            sum += t;
-        }
-        for (int i = 0; i < n; i++) {
-            int idx = sa[i] + k < n ? ra[l][sa[i] + k] : 0;
-            temp_sa[count[idx]++] = sa[i];
-        }
-        sa = temp_sa;
-    }
-
     void build_SA() {
-        for (int i = 0; i < n; i++)
-            ra[0][i] = s[i];
-        for (int i = 0; i < n; i++)
-            sa[i] = i;
-        for (int i = 0; i < __log_n - 1; i++) {
-            int k = (1 << i);
-            if (k >= n)
-                break;
-            __counting_sort(i, k);
-            __counting_sort(i, 0);
+        classes = VI(n);
+
+        {
+            // building the initial classes using counting sort
+            vector<bool> occur(alphabet, 0);
+            for (int i = 0; i < n; i++) occur[s[i]] = true;
+            VI init_class(alphabet, -1);
             int rank = 0;
-            ra[i + 1][sa[0]] = rank;
-            for (int j = 1; j < n; j++)
-                if (ra[i][sa[j]] == ra[i][sa[j - 1]] &&
-                    ra[i][sa[j] + k] == ra[i][sa[j - 1] + k])
-                    ra[i + 1][sa[j]] = rank;
-                else
-                    ra[i + 1][sa[j]] = ++rank;
+            for (int i = 0; i < alphabet; i++)
+                if (occur[i])
+                    init_class[i] = rank++;
+            for (int i = 0; i < n; i++) classes[i] = init_class[s[i]];
         }
-    }
-    void build_LCP() {
-        _lcp = vector<vector<int>>(__log_n, vector<int>(n));
-        for (int i = 0; i < n - 1; i++) {  // Build the LCP array in O(NlogN)
-            int x = sa[i], y = sa[i + 1], k, ret = 0;
-            for (k = __log_n - 1; k >= 0 && x < n && y < n; k--) {
-                if ((1 << k) >= n)
-                    continue;
-                if (ra[k][x] == ra[k][y])
-                    x += 1 << k, y += 1 << k, ret += 1 << k;
+
+        // the size of the subarray that's going to be sorted in the next iteration
+        int sz = 1;
+
+        vector<data> idx_temp(n);
+        idx = vector<data>(n);
+
+        while (true) {
+            {
+                // build the sorted array of indexes
+                VI countsecond(n + 1, 0);
+                VI countfirst(n + 1, 0);
+
+                for (int i = 0; i < n; i++) {
+                    int cnxt = classes[(sz / 2 + i) % n];
+                    int ci = classes[i];
+                    countsecond[cnxt + 1]++;
+                    countfirst[ci + 1]++;
+                }
+
+                // simultaneous radix sort+counting sort
+                for (int i = 1; i < n; i++)
+                    countsecond[i] += countsecond[i - 1], countfirst[i] += countfirst[i - 1];
+
+                // insert in order sorted by second class
+                for (int i = 0; i < n; i++) {
+                    int cnxt = classes[(sz / 2 + i) % n];
+                    int ci = classes[i];
+                    idx_temp[countsecond[cnxt]++] = { { ci, cnxt }, i };
+                }
+
+                // now sort by the first class
+                for (int i = 0; i < n; i++) {
+                    int ci = idx_temp[i].first.first;
+                    idx[countfirst[ci]++] = idx_temp[i];
+                }
             }
-            if (ret >= __dollar[sa[i]] - sa[i])
-                ret = __dollar[sa[i]] - sa[i];
-            _lcp[0][i] = ret;  // LCP[i] shouldn’t exceed __dollar[sa[i]]
-        }  // __dollar[i] : index of __dollar to the right of i.
-        _lcp[0][n - 1] = 10 * n;
-        for (int i = 1; i < __log_n; i++) {  // O(1) RMQ structure in O(NlogN)
-            int add = (1 << (i - 1));
-            if (add >= n)
-                break;  // small optimization
-            for (int j = 0; j < n; j++)
-                if (j + add < n)
-                    _lcp[i][j] = min(_lcp[i - 1][j], _lcp[i - 1][j + add]);
-                else
-                    _lcp[i][j] = _lcp[i - 1][j];
+
+            // assign equivalence classes based on sorted idx
+            classes = VI(n);
+            int rank = 0;
+            for (int i = 0; i < n; i++) {
+                int index = idx[i].second;
+
+                if (i > 0 and idx[i].first > idx[i - 1].first) classes[index] = ++rank;
+                else classes[index] = rank;
+            }
+
+            if (rank == n - 1) break;
+
+            sz <<= 1;
         }
     }
 
-    int lcp(int x, int y) {
-        // O(1) LCP. x & y are indexes of the suffix in sa!
-        if (x == y)
-            return __dollar[sa[x]] - sa[x];
-        if (x > y)
-            swap(x, y);
-        y--;
-        int idx = __msb[y - x + 1], sub = (1 << idx);
-        return min(_lcp[idx][x], _lcp[idx][y - sub + 1]);
+    void build_lcp() {
+        lcp = VI(n);
+
+        int k = 0;
+        for (int i = 0; i < n - 1; i++) {
+            int pi = classes[i];
+            int j = idx[pi - 1].second;
+            while (s[i + k] == s[j + k]) k++;
+
+            lcp[pi] = k;
+            k = max(k - 1, 0);
+        }
+
+        int logn = ceil(log2(n)) + 1;
+        sparselcp = VVI(logn, VI(n, -1));
+        for (int i = 0; i < n; i++) sparselcp[0][i] = lcp[i];
+
+        int sz = 1;
+        for (int lev = 1; lev < logn; lev++) {
+            for (int i = 0; i < n; i++) {
+                int j = i + sz;
+                if (j >= n) break;
+                int val = sparselcp[lev - 1][j];
+                if (val == -1) break;
+                sparselcp[lev][i] = min(sparselcp[lev - 1][i], val);
+            }
+            sz <<= 1;
+        }
     }
 
-    bool equal(int i, int j, int p, int q) {
-        if (j - i != q - p)
-            return false;
-        int idx = __msb[j - i + 1], sub = (1 << idx);
-        return ra[idx][i] == ra[idx][p] &&
-               ra[idx][j - sub + 1] == ra[idx][q - sub + 1];
-    }  // Note : Do not forget to add a terminating ’$’
+    // gets the lcp of the suffixes at position i
+    // and position j
+    int getlcp(int i, int j) {
+        if (i == j) return n - i;
+
+        int pi = classes[i], pj = classes[j];
+        if (pi > pj) swap(pi, pj);
+
+        pi++;
+        int gap = log2(pj - pi + 1);
+
+        return min(sparselcp[gap][pi], sparselcp[gap][pj - (1 << gap) + 1]);
+    }
+
+    // i..j, p..q must be the indices in the string s
+    int comp(int i, int j, int p, int q) {
+        int _lcp = getlcp(i, p);
+        int len1 = j - i + 1, len2 = q - p + 1;
+        int minlen = min(len1, len2);
+
+        if (minlen <= _lcp) return len1 - len2;
+
+        char c1 = s[i + _lcp], c2 = s[p + _lcp];
+        return c1 - c2;
+    }
 };
 
 #endif  // CODE_SMARTSTRING_H
