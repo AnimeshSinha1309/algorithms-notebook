@@ -18,5 +18,5 @@ typedef vector<complex<double>> vcd;
 const long long MOD = 1e9 + 7;
 
 #pragma GCC optimize("Ofast")
-#pragma GCC optimize ("unroll-loops")
+#pragma GCC optimize("unroll-loops")
 #pragma GCC target("sse,sse2,sse3,ssse3,sse4,popcnt,abm,mmx,avx,tune=native")

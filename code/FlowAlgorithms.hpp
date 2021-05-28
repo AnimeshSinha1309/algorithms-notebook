@@ -1,22 +1,7 @@
 #ifndef CODE_FLOW_ALGORITHMS_H
 #define CODE_FLOW_ALGORITHMS_H
 
-<<<<<<< HEAD
-#include <iostream>
-#include <queue>
-#include <vector>
-
-using namespace std;
-
-typedef long long ll;
-typedef vector<long long> vll;
-typedef pair<long long, long long> pll;
-typedef vector<pair<long long, long long>> vpl;
-typedef vector<vector<long long>> mll;
-typedef vector<bool> vbl;
-=======
 #include "../ref/template.hpp"
->>>>>>> master
 
 struct Dinic {
     struct Edge {

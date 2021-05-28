@@ -1,8 +1,8 @@
 #define TURL "http://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=GRL_7_A"
 
-#include "../code/FlowAlgorithms.hpp"
-
 #include <iostream>
+
+#include "../code/FlowAlgorithms.hpp"
 using namespace std;
 
 int main() {
