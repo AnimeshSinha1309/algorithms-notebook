@@ -1,6 +1,6 @@
 #define TURL "http://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=DSL_1_A"
 
-#include "DisjointSet.hpp"
+#include "../code/DisjointSet.hpp"
 
 #include <iostream>
 using namespace std;

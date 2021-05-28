@@ -19,28 +19,30 @@ class Graph {
             list[i].index = i;
         this->n = n;
     }
-    void add_edge(int u, int v, long long w = 1) {
+    void add_edge(int u, int v, long long w = 1, bool bidirectional = true) {
         list[u].adjacent.emplace_back(v, w);
-        list[v].adjacent.emplace_back(u, w);
+        if (bidirectional)
+            list[v].adjacent.emplace_back(u, w);
     }
 
     pair<vll, vll> dijkstra(vll from) {
         vll dist(n, INT64_MAX), parent(n, INT32_MAX);
         priority_queue<pll, vpl, greater<>> q;
+        // q: (distance, node id); edge: (to, weight)
         for (auto index : from) {
             dist[index] = 0;
-            q.emplace(index, 0);
+            q.emplace(0, index);
         }
         while (!q.empty()) {
             pll top = q.top();
             q.pop();
-            if (top.second > dist[top.first])
+            if (top.first > dist[top.second])
                 continue;
-            for (auto edge : list[top.first].adjacent) {
-                if (top.second + edge.second < dist[edge.first]) {
-                    dist[edge.first] = top.second + edge.second;
-                    parent[edge.first] = top.first - 1;
-                    q.emplace(edge.first, top.second + edge.second);
+            for (auto edge : list[top.second].adjacent) {
+                if (top.first + edge.second < dist[edge.first]) {
+                    dist[edge.first] = top.first + edge.second;
+                    parent[edge.first] = top.second - 1;
+                    q.emplace(top.first + edge.second, edge.first);
                 }
             }
         }
@@ -104,10 +106,8 @@ class Graph {
     pair<vll, vll> bellman_ford(vll from) {
         vll distances(n, INT64_MAX);
         vll parent(n, INT32_MAX);
-
         for (ll &i : from)
             distances[i] = 0;
-
         // relax all |E| edges, |V| - 1 times
         for (int i = 0; i < n - 1; i++) {
             for (int source = 0; source <= n - 1; source++) {
@@ -122,14 +122,14 @@ class Graph {
                 }
             }
         }
-
         // Checking for negative cycles and putting -1 if it exists.
         for (ll source = 0; source <= n - 1; source++) {
             for (const auto &edge : list[source].adjacent) {
                 ll sink = edge.first;
-                if (distances[source] + edge.second < distances[sink]) {
+                if (distances[source] < INT64_MAX &&
+                    distances[source] + edge.second < distances[sink]) {
                     for (ll i : from)
-                        distances[i] = -1;
+                        distances[i] = INT64_MIN;
                     return {distances, parent};
                 }
             }
@@ -137,8 +137,8 @@ class Graph {
         return {distances, parent};
     }
 
-    vector<vector<long long>> floyd_warshall() {
-        vector<vector<long long>> distances(n, vector<long long>(n, INT64_MAX));
+    mll floyd_warshall() {
+        mll distances(n, vll(n, INT64_MAX));
         for (int i = 0; i < n; i++)
             distances[i][i] = 0;
         for (int i = 0; i < n; i++)

@@ -6,35 +6,32 @@
 template <class Type>
 class BinaryHeap {
    protected:
-    function<bool(Type, Type)> comparator;
+    function<bool(Type, Type)> comp;
 
     vector<Type> data;
     void siftDown(unsigned long pos) {
-        if (pos >= this->data.size())
+        if (pos >= data.size())
             return;
-        bool lChildExists = this->lChild(pos) < this->data.size(),
-             rChildExists = this->rChild(pos) < this->data.size();
-        if ((lChildExists &&
-             comparator(this->data[this->lChild(pos)], this->data[pos])) ||
-            (rChildExists &&
-             comparator(this->data[this->rChild(pos)], this->data[pos]))) {
-            if (!rChildExists ||
-                (lChildExists && comparator(this->data[this->lChild(pos)],
-                                            this->data[this->rChild(pos)]))) {
-                this->swap(pos, this->lChild(pos));
-                siftDown(this->lChild(pos));
+        bool hasLChild = lChild(pos) < data.size(),
+             hasRChild = rChild(pos) < data.size();
+        if ((hasLChild && comp(data[lChild(pos)], data[pos])) ||
+            (hasRChild && comp(data[rChild(pos)], data[pos]))) {
+            if (!hasRChild ||
+                (hasLChild && comp(data[lChild(pos)], data[rChild(pos)]))) {
+                swap(pos, lChild(pos));
+                siftDown(lChild(pos));
             } else {
-                this->swap(pos, this->rChild(pos));
-                siftDown(this->rChild(pos));
+                swap(pos, rChild(pos));
+                siftDown(rChild(pos));
             }
         }
     }
     void siftUp(unsigned long pos) {
         if (pos == 0)
             return;  // This is the Root Element
-        if (comparator(this->data[pos], this->data[this->parent(pos)])) {
-            this->swap(pos, this->parent(pos));
-            this->siftUp(this->parent(pos));
+        if (comp(data[pos], data[parent(pos)])) {
+            swap(pos, parent(pos));
+            siftUp(parent(pos));
         }
     }
     inline unsigned long parent(unsigned long val) {
@@ -47,42 +44,42 @@ class BinaryHeap {
         return 2 * val + 2;
     }
     void swap(unsigned long x, unsigned long y) {
-        this->data[x] ^= this->data[y];
-        this->data[y] ^= this->data[x];
-        this->data[x] ^= this->data[y];
+        data[x] ^= data[y];
+        data[y] ^= data[x];
+        data[x] ^= data[y];
     }
 
    public:
     explicit BinaryHeap(const vector<Type> &list,
                         function<Type(Type, Type)> heapComparator = less<>()) {
-        this->comparator = heapComparator;
+        comp = heapComparator;
         for (auto i : list)
-            this->data.push_back(i);
-        for (long i = this->data.size() - 1; i >= 0; i--) {
-            this->siftDown((unsigned)i);
+            data.push_back(i);
+        for (long i = data.size() - 1; i >= 0; i--) {
+            siftDown((unsigned)i);
         }
     }
     explicit BinaryHeap(function<Type(Type, Type)> heapComparator = less<>()) {
-        this->comparator = heapComparator;
-        this->data = vector<Type>();
+        comp = heapComparator;
+        data = vector<Type>();
     }
     BinaryHeap(const BinaryHeap &heap) {
-        this->comparator = heap.comparator;
+        comp = heap.comp;
         for (auto val : heap.data)
-            this->data.push_back(val);
+            data.push_back(val);
     }
     void insert(int val) {
-        this->data.push_back(val);
-        this->siftUp(this->data.size() - 1);
+        data.push_back(val);
+        siftUp(data.size() - 1);
     }
     void remove(unsigned long pos) {
-        this->swap(this->data.size() - 1, pos);
-        this->data.pop_back();
-        this->siftUp(pos);
-        this->siftDown(pos);
+        swap(data.size() - 1, pos);
+        data.pop_back();
+        siftUp(pos);
+        siftDown(pos);
     }
     Type top() {
-        return this->data[0];
+        return data[0];
     }
     vector<Type> sort() {
         vector<Type> result;
