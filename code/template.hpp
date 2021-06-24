@@ -1,18 +1,23 @@
 #include <bits/stdc++.h>
 using namespace std;
 
+typedef vector<int> vii;
+typedef vector<vii> mii;
+typedef pair<int, int> pii;
+typedef vector<pii> vpi;
+
 typedef long long ll;
-typedef vector<long long> vll;
-typedef pair<long long, long long> pll;
-typedef vector<vector<long long>> mll;
-typedef vector<pair<long long, long long>> vpl;
+typedef vector<ll> vll;
+typedef pair<ll, ll> pll;
+typedef vector<vll> mll;
+typedef vector<pll> vpl;
+
 typedef long double ld;
 typedef vector<long double> vld;
 typedef vector<vector<long double>> mld;
+
 typedef vector<bool> vbl;
 typedef vector<vector<bool>> mbl;
-#define minimize(a, b) (a = min(a, b))
-#define maximize(a, b) (a = max(a, b))
 
 template <typename Type>
 istream &operator>>(istream &in, vector<Type> &vec) {
@@ -29,8 +34,8 @@ ostream &operator<<(ostream &out, vector<Type> &vec) {
     return out;
 }
 
-long long mod_power(long long a, long long b, long long MOD) {
-    long long cumulative = a, result = 1;
+ll mod_power(ll a, ll b, ll MOD) {
+    ll cumulative = a, result = 1;
     for (; b > 0; b /= 2) {
         if (b % 2 == 1)
             result = (result * cumulative) % MOD;
@@ -39,8 +44,8 @@ long long mod_power(long long a, long long b, long long MOD) {
     return result;
 }
 
-long long mod_multiply(long long a, long long b, long long MOD) {
-    long long cumulative = a, result = 0;
+ll mod_multiply(ll a, ll b, ll MOD) {
+    ll cumulative = a, result = 0;
     for (; b > 0; b /= 2) {
         if (b % 2 == 1)
             result = (result + cumulative) % MOD;
@@ -49,6 +54,6 @@ long long mod_multiply(long long a, long long b, long long MOD) {
     return result;
 }
 
-long long mod_inverse(long long a, long long MOD) {
+ll mod_inverse(ll a, ll MOD) {
     return mod_power(a, MOD - 2, MOD);
 }
