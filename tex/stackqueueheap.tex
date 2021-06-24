@@ -30,7 +30,7 @@
 A \textbf{O(n)} algorithm exists for Heapification. It uses the standard sift-down procedure, but starts by correcting the lowest layers first. So start at the end of the array and move back.
 
 \paragraph{Insert}
-A \textbf{O(log n)} algorithm is used to insert. We push the element at the end of the array and sift-up or sift-down the element till the element is at a valid locale. 
+A \textbf{O(log n)} algorithm is used to insert. We push the element at the end of the array and sift-up or sift-down the element till the element is at a valid locale.
 
 \paragraph{Delete}
 For a \textbf{O(log n)} deletion algorithm, we must swap the last element with the element to be deleted, sift-up/down the former last element, and pop-out the last element.
@@ -38,7 +38,3 @@ This is only possible if we have a refernce to the element, search and delete ta
 
 \paragraph{Minimum/Maximum}
 Minimum on a MinHeap takes \textbf{O(1)} time, and so does Maximum on a MaxHeap.
-
-\subsection{Implementation Code}
-
-\lstinputlisting[basicstyle=Large,style=cpp]{code/BinaryHeap.hpp}

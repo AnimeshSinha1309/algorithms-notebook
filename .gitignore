@@ -1,3 +1,6 @@
+# The testcases from the OJ
+.scratch
+
 # VScode editor directory
 .vscode/
 
@@ -19,6 +22,5 @@ notebook.fdb_latexmk
 cache/*
 
 # Compiled C++ Binaries
-*.test
 *.out
 *.o
