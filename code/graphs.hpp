@@ -30,8 +30,8 @@ vii topological_sort(mii &adj) {
     function<void(int)> dfs = [&](int node) {
         visited[node] = true;
         for (auto el : adj[node]) {
-            if (!visited[node])
-                dfs(node);
+            if (!visited[el])
+                dfs(el);
         }
         ans.push_back(node);
     };
@@ -67,13 +67,14 @@ pair<vll, vll> bellman_ford(vector<vpl> &adj, int from) {
     vll d(n, INT64_MAX), p(n, INT32_MAX);
     d[from] = 0;
     for (int i = 0; i < n; i++)
-        for (int u = 0; u < n - 1; u++)
+        for (int u = 0; u < n; u++)
             if (d[u] != INT64_MAX)
                 for (const auto &e : adj[u]) {
                     if (d[u] + e.second < d[e.first]) {
-                        d[e.first] = d[u] + e.second, p[e.first] = u;
-                        if (i == n)
-                            d[from] = -1;
+                        if (i == n - 1) {
+                            d[e.first] = INT64_MIN;
+                        } else
+                            d[e.first] = d[u] + e.second, p[e.first] = u;
                     }
                 }
     return {d, p};
@@ -81,17 +82,24 @@ pair<vll, vll> bellman_ford(vector<vpl> &adj, int from) {
 
 pair<vll, vll> spfa(vector<vpl> &adj, int from) {
     vll d(adj.size(), INT64_MAX), p(adj.size(), -1);
-    vbl in_queue(adj.size(), false);
+    vector<int> cnt_q(adj.size(), 0);
+    vbl in_q(adj.size(), false);
     queue<int> q;
-    d[from] = 0, q.push(from), in_queue[from] = true;
+    d[from] = 0, q.push(from), in_q[from] = true, cnt_q[from]++;
     while (!q.empty()) {
         auto u = q.front();
-        q.pop(), in_queue[u] = false;
+        q.pop(), in_q[u] = false;
         for (auto e : adj[u]) {
-            if (d[u] + e.second < d[e.first]) {
-                d[e.first] = d[u] + e.second, p[e.first] = u;
-                if (!in_queue[e.first])
-                    q.push(e.first), in_queue[e.first] = true;
+            ll v = e.first, w = e.second;
+            if (d[u] + w < d[v]) {
+                d[v] = d[u] + w, p[v] = u;
+                if (in_q[v])
+                    continue;
+                q.push(v), in_q[v] = true, cnt_q[v]++;
+                if (cnt_q[v] >= adj.size()) {
+                    d[v] = INT64_MIN;
+                    return {d, p};
+                }
             }
         }
     }

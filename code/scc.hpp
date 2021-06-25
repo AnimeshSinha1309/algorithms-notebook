@@ -21,7 +21,7 @@ struct DirectedGraph {
         adjacent_r[v2].insert(v1);
     }
     void _scc_dfs1(int u) {
-        visited[u] = 1;
+        visited[u] = true;
         for (auto w : adjacent_f[u])
             if (!visited[w])
                 _scc_dfs1(w);
@@ -44,9 +44,9 @@ struct DirectedGraph {
         fill(visited.begin(), visited.end(), false);
         reverse(order.begin(), order.end());
         curr = 0;
-        for (auto u : order)
-            if (!visited[u])
-                comp_nodes[++curr].clear(), _scc_dfs2(u);
+        // for (auto u : order)
+        //     if (!visited[u])
+        //         comp_nodes[++curr].clear(), _scc_dfs2(u);
     }
 };
 
@@ -58,14 +58,14 @@ struct Satisfiability : DirectedGraph {
 
     bool solvable() {
         stongly_connected_components();
-        for (int i = 0; i < val.size(); i++)
+        for (size_t i = 0; i < val.size(); i++)
             if (comp[var(i)] == comp[NOT(var(i))])
                 return false;
         return true;
     }
     vector<bool> solve() {
         fill(val.begin(), val.end(), false);
-        for (int i = 0; i < val.size(); i++) {
+        for (size_t i = 0; i < val.size(); i++) {
             val[i] = comp[var(i)] > comp[NOT(var(i))];
         }
         return val;
